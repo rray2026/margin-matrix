@@ -2,6 +2,7 @@ import ReactECharts from 'echarts-for-react';
 import { Card } from 'antd';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getChartStyles } from '../../styles/theme';
+import { useChartHeight } from '../../hooks/useChartHeight';
 import type { CandlestickPoint } from '../../types/company';
 
 interface StockPriceChartProps {
@@ -12,6 +13,7 @@ interface StockPriceChartProps {
 export function StockPriceChart({ data, companyName }: StockPriceChartProps) {
   const { isDark } = useTheme();
   const s = getChartStyles(isDark);
+  const height = useChartHeight(480, 380);
 
   const dates = data.map(d => d.date);
   // ECharts candlestick: [open, close, low, high]
@@ -134,7 +136,7 @@ export function StockPriceChart({ data, companyName }: StockPriceChartProps) {
 
   return (
     <Card size="small" className="chart-card">
-      <ReactECharts option={option} style={{ height: 480 }} notMerge />
+      <ReactECharts option={option} style={{ height }} notMerge />
     </Card>
   );
 }

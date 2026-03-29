@@ -8,17 +8,12 @@ interface MacroKpiCardsProps {
 
 export function MacroKpiCards({ kpi }: MacroKpiCardsProps) {
   return (
-    <Row gutter={[16, 16]} className="kpi-row">
+    <Row gutter={[10, 10]} className="kpi-row">
       <Col xs={12} sm={8} md={6} lg={5} xl={4}>
         <KpiCard title="GDP同比增速" value={kpi.gdpGrowthRate} unit="%" precision={1} />
       </Col>
       <Col xs={12} sm={8} md={6} lg={5} xl={4}>
-        <KpiCard
-          title="CPI同比"
-          value={kpi.cpi}
-          unit="%"
-          precision={1}
-        />
+        <KpiCard title="CPI同比" value={kpi.cpi} unit="%" precision={1} />
       </Col>
       <Col xs={12} sm={8} md={6} lg={5} xl={4}>
         <KpiCard title="1年期LPR" value={kpi.benchmarkRate} unit="%" precision={2} />

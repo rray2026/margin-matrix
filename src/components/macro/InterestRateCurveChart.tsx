@@ -2,6 +2,7 @@ import ReactECharts from 'echarts-for-react';
 import { Card } from 'antd';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getChartStyles } from '../../styles/theme';
+import { useChartHeight } from '../../hooks/useChartHeight';
 import type { InterestRatePoint } from '../../types/macro';
 
 interface InterestRateCurveChartProps {
@@ -11,6 +12,7 @@ interface InterestRateCurveChartProps {
 export function InterestRateCurveChart({ data }: InterestRateCurveChartProps) {
   const { isDark } = useTheme();
   const s = getChartStyles(isDark);
+  const height = useChartHeight(300, 240);
 
   const option = {
     backgroundColor: 'transparent',
@@ -73,7 +75,7 @@ export function InterestRateCurveChart({ data }: InterestRateCurveChartProps) {
 
   return (
     <Card size="small" className="chart-card">
-      <ReactECharts option={option} style={{ height: 300 }} notMerge />
+      <ReactECharts option={option} style={{ height }} notMerge />
     </Card>
   );
 }

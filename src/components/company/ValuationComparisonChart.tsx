@@ -2,6 +2,7 @@ import ReactECharts from 'echarts-for-react';
 import { Card } from 'antd';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getChartStyles } from '../../styles/theme';
+import { useChartHeight } from '../../hooks/useChartHeight';
 import type { ValuationComparison } from '../../types/company';
 
 interface ValuationComparisonChartProps {
@@ -12,6 +13,7 @@ interface ValuationComparisonChartProps {
 export function ValuationComparisonChart({ data, companyName }: ValuationComparisonChartProps) {
   const { isDark } = useTheme();
   const s = getChartStyles(isDark);
+  const height = useChartHeight(320, 260);
 
   const option = {
     backgroundColor: 'transparent',
@@ -70,7 +72,7 @@ export function ValuationComparisonChart({ data, companyName }: ValuationCompari
 
   return (
     <Card size="small" className="chart-card">
-      <ReactECharts option={option} style={{ height: 320 }} notMerge />
+      <ReactECharts option={option} style={{ height }} notMerge />
     </Card>
   );
 }

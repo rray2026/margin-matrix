@@ -2,6 +2,7 @@ import ReactECharts from 'echarts-for-react';
 import { Card } from 'antd';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getChartStyles } from '../../styles/theme';
+import { useChartHeight } from '../../hooks/useChartHeight';
 import type { NorthboundFlow } from '../../types/industry';
 
 interface NorthboundFlowChartProps {
@@ -11,6 +12,7 @@ interface NorthboundFlowChartProps {
 export function NorthboundFlowChart({ data }: NorthboundFlowChartProps) {
   const { isDark } = useTheme();
   const s = getChartStyles(isDark);
+  const height = useChartHeight(360, 280);
 
   const sorted = [...data].sort((a, b) => b.netInflow - a.netInflow);
 
@@ -61,7 +63,7 @@ export function NorthboundFlowChart({ data }: NorthboundFlowChartProps) {
 
   return (
     <Card size="small" className="chart-card">
-      <ReactECharts option={option} style={{ height: 360 }} notMerge />
+      <ReactECharts option={option} style={{ height }} notMerge />
     </Card>
   );
 }

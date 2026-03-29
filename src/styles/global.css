@@ -6,57 +6,134 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
 }
+
+/* ── Layout ─────────────────────────────── */
 
 .dashboard-content {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 12px;
 }
 
-.chart-card {
-  height: 100%;
+@media (min-width: 768px) {
+  .dashboard-content {
+    padding: 24px;
+  }
 }
+
+/* ── Cards ───────────────────────────────── */
 
 .chart-card .ant-card-body {
-  padding: 16px;
+  padding: 10px;
+}
+
+@media (min-width: 768px) {
+  .chart-card .ant-card-body {
+    padding: 16px;
+  }
 }
 
 .kpi-row {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .kpi-row {
+    margin-bottom: 24px;
+  }
 }
 
 .section-gap {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
-.change-positive {
-  color: #f5222d;
+@media (min-width: 768px) {
+  .section-gap {
+    margin-bottom: 24px;
+  }
 }
 
-.change-negative {
-  color: #52c41a;
+/* ── Color helpers ───────────────────────── */
+
+.change-positive { color: #f5222d; }
+.change-negative { color: #52c41a; }
+.change-neutral  { color: #8c8c8c; }
+
+/* ── Bottom nav safe area (iOS) ─────────── */
+
+.bottom-nav-placeholder {
+  height: 60px;
 }
 
-.change-neutral {
-  color: #8c8c8c;
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .bottom-nav-placeholder {
+    height: calc(60px + env(safe-area-inset-bottom));
+  }
 }
 
-/* Custom scrollbar for dark theme */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* ── Custom scrollbar ────────────────────── */
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #434343; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #5a5a5a; }
+
+/* ── Ant Design tab overrides for mobile ─── */
+
+.ant-tabs-nav {
+  margin-bottom: 0 !important;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+/* Bottom tab bar (mobile) */
+.mobile-tabs .ant-tabs-nav {
+  position: fixed !important;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+  border-bottom: none !important;
+  margin: 0 !important;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #434343;
-  border-radius: 3px;
+.mobile-tabs .ant-tabs-nav-wrap {
+  justify-content: space-around;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #5a5a5a;
+.mobile-tabs .ant-tabs-tab {
+  flex: 1;
+  justify-content: center;
+  margin: 0 !important;
+  padding: 10px 0 !important;
+  font-size: 12px;
+}
+
+.mobile-tabs .ant-tabs-tab .anticon {
+  font-size: 18px;
+  display: block;
+  margin: 0 auto 2px;
+}
+
+.mobile-tabs .ant-tabs-tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mobile-tabs .ant-tabs-ink-bar {
+  display: none;
+}
+
+.mobile-tabs .ant-tabs-content-holder {
+  overflow: auto;
+}
+
+/* Desktop tabs */
+.desktop-tabs .ant-tabs-tab {
+  font-size: 14px;
+  padding: 8px 16px;
 }

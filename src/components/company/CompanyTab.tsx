@@ -13,6 +13,7 @@ import { defaultTicker } from '../../mock/companyData';
 export function CompanyTab() {
   const [ticker, setTicker] = useState(defaultTicker);
   const { data } = useCompanyData(ticker);
+  const g = [10, 10] as [number, number];
 
   return (
     <div>
@@ -22,21 +23,21 @@ export function CompanyTab() {
       <CompanyKpiCards kpi={data.kpi} />
 
       <SectionTitle>股价走势</SectionTitle>
-      <Row gutter={[16, 16]} className="section-gap">
+      <Row gutter={g} className="section-gap">
         <Col xs={24}>
           <StockPriceChart data={data.stockPriceCandles} companyName={data.info.name} />
         </Col>
       </Row>
 
       <SectionTitle>财务趋势与估值分析</SectionTitle>
-      <Row gutter={[16, 16]} className="section-gap">
+      <Row gutter={g} className="section-gap">
         <Col xs={24} lg={14}>
           <RevenueProfitChart
             data={data.revenueProfitTrend}
             companyName={data.info.name}
           />
         </Col>
-        <Col xs={24} lg={10}>
+        <Col xs={24} lg={10} style={{ marginTop: 10 }}>
           <ValuationComparisonChart
             data={data.valuationComparison}
             companyName={data.info.name}

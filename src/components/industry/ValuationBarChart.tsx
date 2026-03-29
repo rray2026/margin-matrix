@@ -2,6 +2,7 @@ import ReactECharts from 'echarts-for-react';
 import { Card } from 'antd';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getChartStyles } from '../../styles/theme';
+import { useChartHeight } from '../../hooks/useChartHeight';
 import type { SectorValuation } from '../../types/industry';
 
 interface ValuationBarChartProps {
@@ -11,6 +12,7 @@ interface ValuationBarChartProps {
 export function ValuationBarChart({ data }: ValuationBarChartProps) {
   const { isDark } = useTheme();
   const s = getChartStyles(isDark);
+  const height = useChartHeight(520, 400);
 
   const sorted = [...data].sort((a, b) => a.pe - b.pe);
 
@@ -65,7 +67,7 @@ export function ValuationBarChart({ data }: ValuationBarChartProps) {
 
   return (
     <Card size="small" className="chart-card">
-      <ReactECharts option={option} style={{ height: 520 }} notMerge />
+      <ReactECharts option={option} style={{ height }} notMerge />
     </Card>
   );
 }

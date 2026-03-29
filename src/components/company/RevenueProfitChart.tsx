@@ -2,6 +2,7 @@ import ReactECharts from 'echarts-for-react';
 import { Card } from 'antd';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getChartStyles } from '../../styles/theme';
+import { useChartHeight } from '../../hooks/useChartHeight';
 import type { RevenueProfitPoint } from '../../types/company';
 
 interface RevenueProfitChartProps {
@@ -12,6 +13,7 @@ interface RevenueProfitChartProps {
 export function RevenueProfitChart({ data, companyName }: RevenueProfitChartProps) {
   const { isDark } = useTheme();
   const s = getChartStyles(isDark);
+  const height = useChartHeight(320, 260);
 
   const option = {
     backgroundColor: 'transparent',
@@ -92,7 +94,7 @@ export function RevenueProfitChart({ data, companyName }: RevenueProfitChartProp
 
   return (
     <Card size="small" className="chart-card">
-      <ReactECharts option={option} style={{ height: 320 }} notMerge />
+      <ReactECharts option={option} style={{ height }} notMerge />
     </Card>
   );
 }

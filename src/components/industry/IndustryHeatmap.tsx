@@ -2,6 +2,7 @@ import ReactECharts from 'echarts-for-react';
 import { Card } from 'antd';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getChartStyles } from '../../styles/theme';
+import { useChartHeight } from '../../hooks/useChartHeight';
 import type { HeatmapCell, SectorName } from '../../types/industry';
 
 const SECTORS: SectorName[] = [
@@ -22,6 +23,7 @@ interface IndustryHeatmapProps {
 export function IndustryHeatmap({ data }: IndustryHeatmapProps) {
   const { isDark } = useTheme();
   const s = getChartStyles(isDark);
+  const height = useChartHeight(520, 400);
 
   const heatmapData = data.map(cell => [
     PERIODS.indexOf(cell.period),
@@ -76,7 +78,7 @@ export function IndustryHeatmap({ data }: IndustryHeatmapProps) {
 
   return (
     <Card size="small" className="chart-card">
-      <ReactECharts option={option} style={{ height: 520 }} notMerge />
+      <ReactECharts option={option} style={{ height }} notMerge />
     </Card>
   );
 }

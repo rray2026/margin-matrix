@@ -2,6 +2,7 @@ import ReactECharts from 'echarts-for-react';
 import { Card } from 'antd';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getChartStyles, SECTOR_COLORS } from '../../styles/theme';
+import { useChartHeight } from '../../hooks/useChartHeight';
 import type { SentimentRadarItem } from '../../types/industry';
 
 interface SentimentRadarChartProps {
@@ -11,6 +12,7 @@ interface SentimentRadarChartProps {
 export function SentimentRadarChart({ data }: SentimentRadarChartProps) {
   const { isDark } = useTheme();
   const s = getChartStyles(isDark);
+  const height = useChartHeight(360, 280);
 
   const indicators = [
     { name: '动量', max: 100 },
@@ -56,7 +58,7 @@ export function SentimentRadarChart({ data }: SentimentRadarChartProps) {
 
   return (
     <Card size="small" className="chart-card">
-      <ReactECharts option={option} style={{ height: 360 }} notMerge />
+      <ReactECharts option={option} style={{ height }} notMerge />
     </Card>
   );
 }

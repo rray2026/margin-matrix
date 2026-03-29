@@ -9,25 +9,26 @@ import { useIndustryData } from '../../hooks/useIndustryData';
 
 export function IndustryTab() {
   const { data } = useIndustryData();
+  const g = [10, 10] as [number, number];
 
   return (
     <div>
       <SectionTitle>行业涨跌幅</SectionTitle>
-      <Row gutter={[16, 16]} className="section-gap">
+      <Row gutter={g} className="section-gap">
         <Col xs={24} xl={12}>
           <IndustryHeatmap data={data.heatmap} />
         </Col>
-        <Col xs={24} xl={12}>
+        <Col xs={24} xl={12} style={{ marginTop: 10 }}>
           <ValuationBarChart data={data.valuations} />
         </Col>
       </Row>
 
       <SectionTitle>资金流向 & 景气度</SectionTitle>
-      <Row gutter={[16, 16]} className="section-gap">
+      <Row gutter={g} className="section-gap">
         <Col xs={24} lg={14}>
           <NorthboundFlowChart data={data.northboundFlows} />
         </Col>
-        <Col xs={24} lg={10}>
+        <Col xs={24} lg={10} style={{ marginTop: 10 }}>
           <SentimentRadarChart data={data.sentimentRadar} />
         </Col>
       </Row>

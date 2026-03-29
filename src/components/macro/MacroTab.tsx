@@ -10,6 +10,7 @@ import { useMacroData } from '../../hooks/useMacroData';
 
 export function MacroTab() {
   const { data } = useMacroData();
+  const g = [10, 10] as [number, number];
 
   return (
     <div>
@@ -17,27 +18,27 @@ export function MacroTab() {
       <MacroKpiCards kpi={data.kpi} />
 
       <SectionTitle>经济增长</SectionTitle>
-      <Row gutter={[16, 16]} className="section-gap">
+      <Row gutter={g} className="section-gap">
         <Col xs={24} lg={12}>
           <GdpTrendChart data={data.gdpTrend} />
         </Col>
-        <Col xs={24} lg={12}>
+        <Col xs={24} lg={12} style={{ marginTop: 10 }}>
           <CpiPpiChart data={data.cpiPpiTrend} />
         </Col>
       </Row>
 
       <SectionTitle>货币与利率</SectionTitle>
-      <Row gutter={[16, 16]} className="section-gap">
+      <Row gutter={g} className="section-gap">
         <Col xs={24} lg={12}>
           <InterestRateCurveChart data={data.interestRateCurve} />
         </Col>
-        <Col xs={24} lg={12}>
+        <Col xs={24} lg={12} style={{ marginTop: 10 }}>
           <PmiComboChart data={data.pmi} />
         </Col>
       </Row>
 
       <SectionTitle>汇率</SectionTitle>
-      <Row gutter={[16, 16]} className="section-gap">
+      <Row gutter={g} className="section-gap">
         <Col xs={24}>
           <ExchangeRateChart data={data.exchangeRate} />
         </Col>
