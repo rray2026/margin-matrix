@@ -112,16 +112,11 @@ body {
   font-size: 12px;
 }
 
-.mobile-tabs .ant-tabs-tab .anticon {
-  font-size: 18px;
-  display: block;
-  margin: 0 auto 2px;
-}
-
 .mobile-tabs .ant-tabs-tab-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
+  line-height: 1;
 }
 
 .mobile-tabs .ant-tabs-ink-bar {

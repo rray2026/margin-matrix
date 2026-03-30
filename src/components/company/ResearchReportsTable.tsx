@@ -75,6 +75,7 @@ export function ResearchReportsTable({ data }: ResearchReportsTableProps) {
       rowKey="id"
       pagination={{ pageSize: 5, size: 'small' }}
       size="small"
+      scroll={{ x: 'max-content' }}
     />
   );
 }
