@@ -80,3 +80,13 @@ export interface SupplyChainLayer {
   metrics: SupplyChainMetric[];
 }
 
+export interface SupplyChainIndustry {
+  key: string;
+  name: string;
+  description: string;
+  tag: string;        // 行业标签, e.g. '制造业'
+  tagColor: string;
+  accentColor: string;
+  layers: SupplyChainLayer[];
+}
+
