@@ -14,9 +14,9 @@ const TAB_ITEMS = [
   {
     key: 'macro',
     label: (
-      <span>
-        <LineChartOutlined style={{ display: 'block', margin: '0 auto 2px', fontSize: 18 }} />
-        宏观整体
+      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+        <LineChartOutlined style={{ fontSize: 18 }} />
+        <span style={{ fontSize: 12, lineHeight: 1 }}>宏观整体</span>
       </span>
     ),
     children: <MacroTab />,
@@ -24,9 +24,9 @@ const TAB_ITEMS = [
   {
     key: 'industry',
     label: (
-      <span>
-        <BarChartOutlined style={{ display: 'block', margin: '0 auto 2px', fontSize: 18 }} />
-        行业
+      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+        <BarChartOutlined style={{ fontSize: 18 }} />
+        <span style={{ fontSize: 12, lineHeight: 1 }}>行业</span>
       </span>
     ),
     children: <IndustryTab />,
@@ -34,9 +34,9 @@ const TAB_ITEMS = [
   {
     key: 'company',
     label: (
-      <span>
-        <BankOutlined style={{ display: 'block', margin: '0 auto 2px', fontSize: 18 }} />
-        公司
+      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+        <BankOutlined style={{ fontSize: 18 }} />
+        <span style={{ fontSize: 12, lineHeight: 1 }}>公司</span>
       </span>
     ),
     children: <CompanyTab />,
