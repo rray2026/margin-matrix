@@ -3,6 +3,7 @@ import { ConfigProvider, Tabs, Dropdown, Space, Typography, theme as antdTheme }
 import {
   BarChartOutlined, BankOutlined, LineChartOutlined,
   SettingOutlined, AppstoreOutlined, DownOutlined,
+  RiseOutlined,
 } from '@ant-design/icons';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { DashboardLayout } from './layouts/DashboardLayout';
@@ -10,17 +11,18 @@ import { MacroTab } from './components/macro/MacroTab';
 import { IndustryTab } from './components/industry/IndustryTab';
 import { CompanyTab } from './components/company/CompanyTab';
 import { SettingsTab } from './components/settings/SettingsTab';
+import { InvestmentTab } from './components/investment/InvestmentTab';
 import { lightTheme, darkTheme } from './styles/theme';
 import { useIsMobile } from './hooks/useIsMobile';
 import './styles/global.css';
 
-type MainTab = 'data' | 'settings';
+type MainTab = 'data' | 'invest' | 'settings';
 type DataTab = 'macro' | 'industry' | 'company';
 
 const DATA_SUB_TABS = [
-  { key: 'macro' as DataTab,    Icon: LineChartOutlined, label: '宏观整体' },
+  { key: 'macro'    as DataTab, Icon: LineChartOutlined, label: '宏观整体' },
   { key: 'industry' as DataTab, Icon: BarChartOutlined,  label: '行业'     },
-  { key: 'company' as DataTab,  Icon: BankOutlined,      label: '公司'     },
+  { key: 'company'  as DataTab, Icon: BankOutlined,      label: '公司'     },
 ];
 
 const DESKTOP_DATA_TAB_ITEMS = [
@@ -30,9 +32,16 @@ const DESKTOP_DATA_TAB_ITEMS = [
 ];
 
 const MOBILE_MAIN_NAV = [
-  { key: 'data'     as MainTab, Icon: AppstoreOutlined, label: '数据' },
-  { key: 'settings' as MainTab, Icon: SettingOutlined,  label: '设置' },
+  { key: 'data'     as MainTab, Icon: AppstoreOutlined, label: '数据'  },
+  { key: 'invest'   as MainTab, Icon: RiseOutlined,     label: '投资'  },
+  { key: 'settings' as MainTab, Icon: SettingOutlined,  label: '设置'  },
 ];
+
+const MAIN_TAB_LABEL: Record<MainTab, string> = {
+  data:     '数据',
+  invest:   '投资',
+  settings: '设置',
+};
 
 function AppContent() {
   const { isDark } = useTheme();
@@ -42,7 +51,7 @@ function AppContent() {
 
   const currentSubLabel = DATA_SUB_TABS.find(t => t.key === activeData)?.label ?? '宏观整体';
 
-  // Mobile header left: dropdown to switch data sub-tab, or plain "设置" title
+  // Mobile header left area
   const mobileHeaderLeft = activeMain === 'data' ? (
     <Dropdown
       menu={{
@@ -65,7 +74,7 @@ function AppContent() {
     </Dropdown>
   ) : (
     <Typography.Title level={5} style={{ margin: 0, fontSize: 15 }}>
-      设置
+      {MAIN_TAB_LABEL[activeMain]}
     </Typography.Title>
   );
 
@@ -79,15 +88,13 @@ function AppContent() {
       <DashboardLayout headerLeftContent={isMobile ? mobileHeaderLeft : undefined}>
         {isMobile ? (
           <>
-            {/* Render all panels; hide inactive ones to preserve chart state */}
             <div style={{ display: activeMain === 'data' ? 'block' : 'none' }}>
               <div style={{ display: activeData === 'macro'    ? 'block' : 'none' }}><MacroTab /></div>
               <div style={{ display: activeData === 'industry' ? 'block' : 'none' }}><IndustryTab /></div>
               <div style={{ display: activeData === 'company'  ? 'block' : 'none' }}><CompanyTab /></div>
             </div>
-            <div style={{ display: activeMain === 'settings' ? 'block' : 'none' }}>
-              <SettingsTab />
-            </div>
+            <div style={{ display: activeMain === 'invest'   ? 'block' : 'none' }}><InvestmentTab /></div>
+            <div style={{ display: activeMain === 'settings' ? 'block' : 'none' }}><SettingsTab /></div>
 
             <div className="bottom-nav-placeholder" />
             <nav className="mobile-bottom-nav" style={{
@@ -99,9 +106,7 @@ function AppContent() {
                   key={key}
                   onClick={() => setActiveMain(key)}
                   className="mobile-bottom-nav-item"
-                  style={{
-                    color: activeMain === key ? '#1677ff' : (isDark ? '#8c8c8c' : '#8c8c8c'),
-                  }}
+                  style={{ color: activeMain === key ? '#1677ff' : (isDark ? '#8c8c8c' : '#8c8c8c') }}
                 >
                   <Icon style={{ fontSize: 22 }} />
                   <span>{label}</span>
@@ -110,7 +115,6 @@ function AppContent() {
             </nav>
           </>
         ) : (
-          /* Desktop: outer tab (数据/设置) → inner tabs for data sub-sections */
           <Tabs
             activeKey={activeMain}
             onChange={key => setActiveMain(key as MainTab)}
@@ -128,6 +132,11 @@ function AppContent() {
                     items={DESKTOP_DATA_TAB_ITEMS}
                   />
                 ),
+              },
+              {
+                key: 'invest',
+                label: <span><RiseOutlined style={{ marginRight: 6 }} />投资</span>,
+                children: <div style={{ paddingTop: 16 }}><InvestmentTab /></div>,
               },
               {
                 key: 'settings',
