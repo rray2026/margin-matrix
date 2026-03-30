@@ -52,3 +52,31 @@ export interface IndustryData {
   sentimentRadar: SentimentRadarItem[];
   sectorTrends: SectorTrendRow[];
 }
+
+/* ── Supply Chain ────────────────────────── */
+
+export interface SupplyChainCompany {
+  name: string;
+  code?: string;
+}
+
+export interface SupplyChainMetric {
+  label: string;
+  value: string;
+  up?: boolean; // true = positive trend
+}
+
+export type SupplyChainCategory = 'supply' | 'product' | 'purchase' | 'service';
+
+export interface SupplyChainLayer {
+  key: string;
+  category: SupplyChainCategory;
+  name: string;
+  subtitle: string;
+  color: string;
+  marketSize: number;   // 亿元
+  growth: number;       // YoY %
+  companies: SupplyChainCompany[];
+  metrics: SupplyChainMetric[];
+}
+
