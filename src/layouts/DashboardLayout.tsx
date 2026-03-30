@@ -7,6 +7,12 @@ import type { ReactNode } from 'react';
 
 const { Header, Content } = Layout;
 
+const buildTime = (() => {
+  const d = new Date(__BUILD_TIME__);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+})();
+
 interface DashboardLayoutProps {
   children: ReactNode;
 }
@@ -37,7 +43,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <Space size={8} align="center">
           <FundOutlined style={{ fontSize: isMobile ? 18 : 22, color: '#1677ff' }} />
           <Typography.Title
-            level={isMobile ? 5 : 5}
+            level={5}
             style={{ margin: 0, fontSize: isMobile ? 15 : 16 }}
           >
             基金研究仪表盘
@@ -48,7 +54,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </Typography.Text>
           )}
         </Space>
-        <Space size={isMobile ? 8 : 12} align="center">
+        <Space size={isMobile ? 6 : 12} align="center">
+          <Typography.Text type="secondary" style={{ fontSize: isMobile ? 10 : 12 }}>
+            构建 {buildTime}
+          </Typography.Text>
           {!isMobile && (
             <Typography.Text type="secondary" style={{ fontSize: 12 }}>
               数据更新：2025-03-29

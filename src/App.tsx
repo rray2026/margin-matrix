@@ -10,50 +10,35 @@ import { lightTheme, darkTheme } from './styles/theme';
 import { useIsMobile } from './hooks/useIsMobile';
 import './styles/global.css';
 
-const TAB_ITEMS = [
+const CONTENT_ITEMS = [
+  { key: 'macro', label: '宏观整体', children: <MacroTab /> },
+  { key: 'industry', label: '行业', children: <IndustryTab /> },
+  { key: 'company', label: '公司', children: <CompanyTab /> },
+];
+
+const DESKTOP_TAB_ITEMS = [
   {
     key: 'macro',
-    label: (
-      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-        <LineChartOutlined style={{ fontSize: 18 }} />
-        <span style={{ fontSize: 12, lineHeight: 1 }}>宏观整体</span>
-      </span>
-    ),
+    label: <span><LineChartOutlined style={{ marginRight: 6 }} />宏观整体</span>,
     children: <MacroTab />,
   },
   {
     key: 'industry',
-    label: (
-      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-        <BarChartOutlined style={{ fontSize: 18 }} />
-        <span style={{ fontSize: 12, lineHeight: 1 }}>行业</span>
-      </span>
-    ),
+    label: <span><BarChartOutlined style={{ marginRight: 6 }} />行业</span>,
     children: <IndustryTab />,
   },
   {
     key: 'company',
-    label: (
-      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-        <BankOutlined style={{ fontSize: 18 }} />
-        <span style={{ fontSize: 12, lineHeight: 1 }}>公司</span>
-      </span>
-    ),
+    label: <span><BankOutlined style={{ marginRight: 6 }} />公司</span>,
     children: <CompanyTab />,
   },
 ];
 
-const DESKTOP_TAB_ITEMS = TAB_ITEMS.map(item => ({
-  ...item,
-  label: (
-    <span>
-      {item.key === 'macro' && <LineChartOutlined style={{ marginRight: 6 }} />}
-      {item.key === 'industry' && <BarChartOutlined style={{ marginRight: 6 }} />}
-      {item.key === 'company' && <BankOutlined style={{ marginRight: 6 }} />}
-      {item.key === 'macro' ? '宏观整体' : item.key === 'industry' ? '行业' : '公司'}
-    </span>
-  ),
-}));
+const MOBILE_NAV = [
+  { key: 'macro', Icon: LineChartOutlined, label: '宏观整体' },
+  { key: 'industry', Icon: BarChartOutlined, label: '行业' },
+  { key: 'company', Icon: BankOutlined, label: '公司' },
+];
 
 function AppContent() {
   const { isDark } = useTheme();
@@ -73,17 +58,30 @@ function AppContent() {
             <Tabs
               activeKey={activeKey}
               onChange={setActiveKey}
-              items={TAB_ITEMS}
-              className="mobile-tabs"
-              tabBarStyle={{
-                background: isDark ? '#1f1f1f' : '#ffffff',
-              }}
-              renderTabBar={(props, DefaultTabBar) => (
-                <DefaultTabBar {...props} />
-              )}
+              items={CONTENT_ITEMS}
+              tabBarStyle={{ display: 'none' }}
             />
-            {/* Safe-area spacer so content isn't hidden behind bottom nav */}
             <div className="bottom-nav-placeholder" />
+            <nav className="mobile-bottom-nav" style={{
+              background: isDark ? '#1f1f1f' : '#ffffff',
+              borderTop: `1px solid ${isDark ? '#434343' : '#f0f0f0'}`,
+            }}>
+              {MOBILE_NAV.map(({ key, Icon, label }) => (
+                <button
+                  key={key}
+                  onClick={() => setActiveKey(key)}
+                  className="mobile-bottom-nav-item"
+                  style={{
+                    color: activeKey === key
+                      ? '#1677ff'
+                      : (isDark ? '#8c8c8c' : '#8c8c8c'),
+                  }}
+                >
+                  <Icon style={{ fontSize: 22 }} />
+                  <span>{label}</span>
+                </button>
+              ))}
+            </nav>
           </>
         ) : (
           <Tabs
