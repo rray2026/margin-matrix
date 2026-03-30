@@ -23,7 +23,7 @@ export function ValuationBarChart({ data }: ValuationBarChartProps) {
     title: { text: '行业估值 PE / PB', ...s.baseTitle },
     legend: { ...s.baseLegend, top: 28, data: ['PE(TTM)', 'PB'] },
     tooltip: { ...s.baseTooltip, trigger: 'axis', axisPointer: { type: 'shadow' } },
-    grid: { ...s.baseGrid, top: 60, left: isMobile ? 72 : 90, right: isMobile ? 44 : 20 },
+    grid: { ...s.baseGrid, top: 60, left: isMobile ? 56 : 90, right: isMobile ? 40 : 20 },
     xAxis: {
       type: 'value',
       name: '倍',

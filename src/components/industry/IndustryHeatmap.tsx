@@ -47,8 +47,8 @@ export function IndustryHeatmap({ data }: IndustryHeatmapProps) {
       ...s.baseGrid,
       top: 50,
       bottom: 30,
-      left: isMobile ? 72 : 90,
-      right: isMobile ? 72 : 120,
+      left: isMobile ? 56 : 90,
+      right: isMobile ? 54 : 120,
     },
     xAxis: {
       type: 'category',
