@@ -1,4 +1,4 @@
-import { Badge, Tag, Typography, Button, Space, Tooltip } from 'antd';
+import { Badge, Tag, Typography, Button, Space } from 'antd';
 import {
   ClockCircleOutlined, SyncOutlined, CheckCircleOutlined,
   CloseCircleOutlined, CalendarOutlined, AimOutlined,
@@ -57,13 +57,6 @@ function TransitionButtons({
 }) {
   const nexts = PREDICTION_TRANSITIONS[status];
   if (nexts.length === 0) return null;
-
-  const buttonConfig: Partial<Record<PredictionStatus, { label: string; type: 'primary' | 'default' | 'dashed'; danger?: boolean }>> = {
-    pending:     { label: '开始验证', type: 'primary' },
-    active:      { label: '开始验证', type: 'primary' },
-    realized:    { label: '已兑现',   type: 'default' },
-    invalidated: { label: '已证伪',   type: 'default', danger: true },
-  };
 
   const labelMap: Record<PredictionStatus, string> = {
     pending:     '开始验证',

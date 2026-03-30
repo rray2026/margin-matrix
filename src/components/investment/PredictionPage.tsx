@@ -4,7 +4,6 @@ import { PredictionCard } from './PredictionCard';
 import { initialPredictions } from '../../mock/investmentData';
 import type { Prediction, PredictionStatus } from '../../types/investment';
 import { PREDICTION_STATUS_LABEL } from '../../types/investment';
-import { useIsMobile } from '../../hooks/useIsMobile';
 
 const STATUS_ORDER: (PredictionStatus | 'all')[] = [
   'all', 'active', 'pending', 'realized', 'invalidated',
@@ -21,7 +20,6 @@ const STATUS_TAB_LABEL: Record<PredictionStatus | 'all', string> = {
 export function PredictionPage() {
   const [predictions, setPredictions] = useState<Prediction[]>(initialPredictions);
   const [filterStatus, setFilterStatus] = useState<PredictionStatus | 'all'>('all');
-  const isMobile = useIsMobile();
 
   const handleTransition = (id: string, next: PredictionStatus) => {
     const now = new Date().toISOString().slice(0, 10);
