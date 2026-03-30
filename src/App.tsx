@@ -3,7 +3,7 @@ import { ConfigProvider, Tabs, Dropdown, Space, Typography, theme as antdTheme }
 import {
   BarChartOutlined, BankOutlined, LineChartOutlined,
   SettingOutlined, AppstoreOutlined, DownOutlined,
-  RiseOutlined,
+  RiseOutlined, FundOutlined, BulbOutlined,
 } from '@ant-design/icons';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { DashboardLayout } from './layouts/DashboardLayout';
@@ -11,13 +11,15 @@ import { MacroTab } from './components/macro/MacroTab';
 import { IndustryTab } from './components/industry/IndustryTab';
 import { CompanyTab } from './components/company/CompanyTab';
 import { SettingsTab } from './components/settings/SettingsTab';
-import { InvestmentTab } from './components/investment/InvestmentTab';
+import { PredictionPage } from './components/investment/PredictionPage';
+import { InvestmentLogicPage } from './components/investment/InvestmentLogicPage';
 import { lightTheme, darkTheme } from './styles/theme';
 import { useIsMobile } from './hooks/useIsMobile';
 import './styles/global.css';
 
 type MainTab = 'data' | 'invest' | 'settings';
 type DataTab = 'macro' | 'industry' | 'company';
+type InvestTab = 'predictions' | 'logic';
 
 const DATA_SUB_TABS = [
   { key: 'macro'    as DataTab, Icon: LineChartOutlined, label: '宏观整体' },
@@ -25,10 +27,20 @@ const DATA_SUB_TABS = [
   { key: 'company'  as DataTab, Icon: BankOutlined,      label: '公司'     },
 ];
 
+const INVEST_SUB_TABS = [
+  { key: 'predictions' as InvestTab, Icon: FundOutlined,  label: '预测'     },
+  { key: 'logic'       as InvestTab, Icon: BulbOutlined,  label: '投资逻辑' },
+];
+
 const DESKTOP_DATA_TAB_ITEMS = [
   { key: 'macro',    label: <span><LineChartOutlined style={{ marginRight: 6 }} />宏观整体</span>, children: <MacroTab />    },
   { key: 'industry', label: <span><BarChartOutlined  style={{ marginRight: 6 }} />行业</span>,     children: <IndustryTab /> },
   { key: 'company',  label: <span><BankOutlined      style={{ marginRight: 6 }} />公司</span>,     children: <CompanyTab />  },
+];
+
+const DESKTOP_INVEST_TAB_ITEMS = [
+  { key: 'predictions', label: <span><FundOutlined  style={{ marginRight: 6 }} />预测</span>,     children: <PredictionPage />     },
+  { key: 'logic',       label: <span><BulbOutlined  style={{ marginRight: 6 }} />投资逻辑</span>, children: <InvestmentLogicPage /> },
 ];
 
 const MOBILE_MAIN_NAV = [
@@ -48,8 +60,10 @@ function AppContent() {
   const isMobile = useIsMobile();
   const [activeMain, setActiveMain] = useState<MainTab>('data');
   const [activeData, setActiveData] = useState<DataTab>('macro');
+  const [activeInvest, setActiveInvest] = useState<InvestTab>('predictions');
 
-  const currentSubLabel = DATA_SUB_TABS.find(t => t.key === activeData)?.label ?? '宏观整体';
+  const currentDataSubLabel   = DATA_SUB_TABS.find(t => t.key === activeData)?.label     ?? '宏观整体';
+  const currentInvestSubLabel = INVEST_SUB_TABS.find(t => t.key === activeInvest)?.label ?? '预测';
 
   // Mobile header left area
   const mobileHeaderLeft = activeMain === 'data' ? (
@@ -67,7 +81,27 @@ function AppContent() {
     >
       <Space size={4} style={{ cursor: 'pointer' }}>
         <Typography.Title level={5} style={{ margin: 0, fontSize: 15 }}>
-          {currentSubLabel}
+          {currentDataSubLabel}
+        </Typography.Title>
+        <DownOutlined style={{ fontSize: 11, color: '#8c8c8c' }} />
+      </Space>
+    </Dropdown>
+  ) : activeMain === 'invest' ? (
+    <Dropdown
+      menu={{
+        selectedKeys: [activeInvest],
+        onClick: ({ key }) => setActiveInvest(key as InvestTab),
+        items: INVEST_SUB_TABS.map(({ key, Icon, label }) => ({
+          key,
+          icon: <Icon />,
+          label,
+        })),
+      }}
+      trigger={['click']}
+    >
+      <Space size={4} style={{ cursor: 'pointer' }}>
+        <Typography.Title level={5} style={{ margin: 0, fontSize: 15 }}>
+          {currentInvestSubLabel}
         </Typography.Title>
         <DownOutlined style={{ fontSize: 11, color: '#8c8c8c' }} />
       </Space>
@@ -93,7 +127,10 @@ function AppContent() {
               <div style={{ display: activeData === 'industry' ? 'block' : 'none' }}><IndustryTab /></div>
               <div style={{ display: activeData === 'company'  ? 'block' : 'none' }}><CompanyTab /></div>
             </div>
-            <div style={{ display: activeMain === 'invest'   ? 'block' : 'none' }}><InvestmentTab /></div>
+            <div style={{ display: activeMain === 'invest' ? 'block' : 'none' }}>
+              <div style={{ display: activeInvest === 'predictions' ? 'block' : 'none' }}><PredictionPage /></div>
+              <div style={{ display: activeInvest === 'logic'       ? 'block' : 'none' }}><InvestmentLogicPage /></div>
+            </div>
             <div style={{ display: activeMain === 'settings' ? 'block' : 'none' }}><SettingsTab /></div>
 
             <div className="bottom-nav-placeholder" />
@@ -136,7 +173,14 @@ function AppContent() {
               {
                 key: 'invest',
                 label: <span><RiseOutlined style={{ marginRight: 6 }} />投资</span>,
-                children: <div style={{ paddingTop: 16 }}><InvestmentTab /></div>,
+                children: (
+                  <Tabs
+                    activeKey={activeInvest}
+                    onChange={key => setActiveInvest(key as InvestTab)}
+                    tabBarStyle={{ margin: '8px 0 16px' }}
+                    items={DESKTOP_INVEST_TAB_ITEMS}
+                  />
+                ),
               },
               {
                 key: 'settings',

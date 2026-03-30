@@ -1,4 +1,4 @@
-import type { Prediction } from '../types/investment';
+import type { Prediction, InvestmentLogic } from '../types/investment';
 
 export const initialPredictions: Prediction[] = [
   {
@@ -89,5 +89,108 @@ export const initialPredictions: Prediction[] = [
     createdAt: '2024-03-10',
     activeAt: '2024-03-10',
     resolvedAt: '2024-12-31',
+  },
+];
+
+export const initialLogics: InvestmentLogic[] = [
+  {
+    id: 'l1',
+    subject: '黄金 / GLD',
+    coreLogic: '全球央行去美元化加速，黄金重新承担储备货币锚定功能。美联储降息周期叠加地缘政治风险溢价，实际利率中枢系统性下移，黄金长期配置价值凸显。',
+    catalysts: [
+      '美联储加速降息，实际利率转负',
+      '中东/俄乌冲突升级推高避险需求',
+      '各国央行持续净买入超预期',
+    ],
+    risks: [
+      '美国经济"软着陆"成功，降息预期推迟',
+      '美元意外走强压制金价',
+      '地缘局势缓和导致风险溢价收窄',
+    ],
+    timeHorizon: '2-3年',
+    conviction: 'high',
+    status: 'active',
+    createdAt: '2024-11-01',
+    updatedAt: '2025-03-01',
+    tags: ['黄金', '大宗商品', '宏观对冲'],
+  },
+  {
+    id: 'l2',
+    subject: 'A股半导体产业链',
+    coreLogic: '国产替代进入加速兑现阶段，华为/中芯等核心企业突破封锁节点，带动上游设备、材料、EDA等二三线标的估值重估。AI算力需求爆发为国产芯片打开增量市场。',
+    catalysts: [
+      'HBM/先进封装国产化取得阶段性突破',
+      '大基金三期持续加码，政策信号明确',
+      '美国出口管制进一步收紧倒逼替代需求',
+    ],
+    risks: [
+      '技术迭代速度不及预期，良率问题迟迟未解',
+      '全球科技股估值回调传导至A股',
+      '中美关系边际改善降低替代紧迫性',
+    ],
+    timeHorizon: '3-5年',
+    conviction: 'high',
+    status: 'active',
+    createdAt: '2025-01-05',
+    tags: ['半导体', '国产替代', 'A股', 'AI'],
+  },
+  {
+    id: 'l3',
+    subject: '港股互联网龙头（腾讯/阿里/美团）',
+    coreLogic: '监管最严时期已过，平台经济政策从整治转向扶持。AI应用落地重塑变现模式，港股极度低估值提供安全边际，南向与外资形成共振回补。',
+    catalysts: [
+      'AI大模型深度集成核心产品（搜索/电商/支付）',
+      '港股通扩容，内地机构持仓比例提升',
+      '回购力度持续超市场预期',
+    ],
+    risks: [
+      '中美摩擦升级，ADR退市风险重燃',
+      '国内消费复苏不及预期影响广告/电商增速',
+      '竞争格局恶化，抖音/拼多多持续蚕食份额',
+    ],
+    timeHorizon: '1-2年',
+    conviction: 'medium',
+    status: 'active',
+    createdAt: '2025-02-10',
+    tags: ['港股', '互联网', '平台经济'],
+  },
+  {
+    id: 'l4',
+    subject: '日本股票市场（Topix / 日经225）',
+    coreLogic: '企业治理改革推动ROE系统性提升，东京证交所"改善资本效率"压力传导，回购分红大幅增加。日元贬值提升出口企业竞争力，外资持续回流。',
+    catalysts: [
+      '日本加息节奏慢于预期，日元维持弱势',
+      '巴菲特增持五大商社效应持续发酵',
+      '企业治理评级提升解锁机构增配',
+    ],
+    risks: [
+      '日元快速升值压制出口企业盈利',
+      '日本央行意外快速加息引发流动性冲击',
+      '全球风险偏好下降，外资撤离',
+    ],
+    timeHorizon: '1-2年',
+    conviction: 'medium',
+    status: 'watching',
+    createdAt: '2024-09-15',
+    updatedAt: '2025-01-20',
+    tags: ['日股', '海外市场', '治理改革'],
+  },
+  {
+    id: 'l5',
+    subject: '国内消费REITs',
+    coreLogic: '国内基础设施REITs扩容至消费类资产（购物中心/奥特莱斯），底层资产现金流稳定，分红收益率具吸引力，适合作为低利率环境下的类固收替代。',
+    catalysts: [
+      'REITs市场扩容，流动性改善',
+      '消费复苏拉动底层物业出租率和租金',
+    ],
+    risks: [
+      '利率上行压缩估值溢价',
+      '线下消费持续受线上冲击，出租率下滑',
+    ],
+    timeHorizon: '长期持有',
+    conviction: 'low',
+    status: 'watching',
+    createdAt: '2025-03-10',
+    tags: ['REITs', '消费', '类固收'],
   },
 ];

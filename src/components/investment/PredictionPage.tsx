@@ -3,7 +3,7 @@ import {
   Tabs, Empty, Typography, Row, Col,
   Button, Modal, Form, Input, Select,
 } from 'antd';
-import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { PredictionCard } from './PredictionCard';
 import { initialPredictions } from '../../mock/investmentData';
 import type { Prediction, PredictionStatus } from '../../types/investment';
@@ -87,11 +87,7 @@ function AddPredictionModal({ open, onClose, onAdd }: AddModalProps) {
 
 /* ── Main Component ─────────────────────── */
 
-interface PredictionPageProps {
-  onBack?: () => void;
-}
-
-export function PredictionPage({ onBack }: PredictionPageProps) {
+export function PredictionPage() {
   const [predictions, setPredictions] = useState<Prediction[]>(initialPredictions);
   const [filterStatus, setFilterStatus] = useState<PredictionStatus | 'all'>('all');
   const [addOpen, setAddOpen] = useState(false);
@@ -144,11 +140,7 @@ export function PredictionPage({ onBack }: PredictionPageProps) {
     <div>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0 12px' }}>
-        {onBack && (
-          <Button type="text" icon={<ArrowLeftOutlined />} size="small" onClick={onBack} />
-        )}
-        <Typography.Title level={5} style={{ margin: 0, flex: 1 }}>预测</Typography.Title>
-        <Typography.Text type="secondary" style={{ fontSize: 12, marginRight: 4 }}>
+        <Typography.Text type="secondary" style={{ fontSize: 12, flex: 1 }}>
           共 {predictions.length} 条
         </Typography.Text>
         <Button

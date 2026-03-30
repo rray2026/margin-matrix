@@ -45,3 +45,46 @@ export interface Prediction {
   activeAt?: string;
   resolvedAt?: string;
 }
+
+/* ── Investment Logic ─────────────────────── */
+
+export type ConvictionLevel = 'high' | 'medium' | 'low';
+export type LogicStatus = 'active' | 'watching' | 'exited';
+
+export const LOGIC_STATUS_LABEL: Record<LogicStatus, string> = {
+  active:   '持有中',
+  watching: '观察中',
+  exited:   '已退出',
+};
+
+export const LOGIC_STATUS_COLOR: Record<LogicStatus, string> = {
+  active:   'success',
+  watching: 'processing',
+  exited:   'default',
+};
+
+export const CONVICTION_LABEL: Record<ConvictionLevel, string> = {
+  high:   '高',
+  medium: '中',
+  low:    '低',
+};
+
+export const CONVICTION_COLOR: Record<ConvictionLevel, string> = {
+  high:   '#f5222d',
+  medium: '#fa8c16',
+  low:    '#8c8c8c',
+};
+
+export interface InvestmentLogic {
+  id: string;
+  subject: string;        // 投资标的
+  coreLogic: string;      // 核心逻辑
+  catalysts: string[];    // 催化剂
+  risks: string[];        // 主要风险
+  timeHorizon: string;    // 持有周期
+  conviction: ConvictionLevel;
+  status: LogicStatus;
+  createdAt: string;
+  updatedAt?: string;
+  tags: string[];
+}
