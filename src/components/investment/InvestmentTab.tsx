@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Card, Typography } from 'antd';
-import { ArrowLeftOutlined, FundProjectionScreenOutlined, RightOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { FundProjectionScreenOutlined, RightOutlined } from '@ant-design/icons';
 import { PredictionPage } from './PredictionPage';
 
 type Page = 'main' | 'predictions';
@@ -20,15 +19,7 @@ export function InvestmentTab() {
   const [page, setPage] = useState<Page>('main');
 
   if (page === 'predictions') {
-    return (
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0 12px' }}>
-          <Button type="text" icon={<ArrowLeftOutlined />} size="small" onClick={() => setPage('main')} />
-          <Typography.Title level={5} style={{ margin: 0 }}>预测</Typography.Title>
-        </div>
-        <PredictionPage />
-      </div>
-    );
+    return <PredictionPage onBack={() => setPage('main')} />;
   }
 
   return (

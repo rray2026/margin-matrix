@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { Tabs, Empty, Typography, Row, Col } from 'antd';
+import {
+  Tabs, Empty, Typography, Row, Col,
+  Button, Modal, Form, Input, Select,
+} from 'antd';
+import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import { PredictionCard } from './PredictionCard';
 import { initialPredictions } from '../../mock/investmentData';
 import type { Prediction, PredictionStatus } from '../../types/investment';
@@ -17,9 +21,80 @@ const STATUS_TAB_LABEL: Record<PredictionStatus | 'all', string> = {
   invalidated: '已证伪',
 };
 
-export function PredictionPage() {
+/* ── Add Prediction Modal ────────────────── */
+
+interface AddModalProps {
+  open: boolean;
+  onClose: () => void;
+  onAdd: (p: Prediction) => void;
+}
+
+function AddPredictionModal({ open, onClose, onAdd }: AddModalProps) {
+  const [form] = Form.useForm();
+
+  const handleOk = () => {
+    form.validateFields().then(values => {
+      onAdd({
+        id: Date.now().toString(),
+        title:     values.title,
+        basis:     values.basis,
+        target:    values.target,
+        timeframe: values.timeframe,
+        tags:      values.tags ?? [],
+        status:    'pending',
+        createdAt: new Date().toISOString().slice(0, 10),
+      });
+      form.resetFields();
+      onClose();
+    });
+  };
+
+  return (
+    <Modal
+      title="新增预判"
+      open={open}
+      onCancel={() => { form.resetFields(); onClose(); }}
+      onOk={handleOk}
+      okText="添加"
+      cancelText="取消"
+      destroyOnClose
+    >
+      <Form form={form} layout="vertical" style={{ marginTop: 8 }}>
+        <Form.Item name="title" label="预判标题" rules={[{ required: true, message: '请填写标题' }]}>
+          <Input placeholder="简短描述你的预判，e.g. 黄金突破 3,000 美元" />
+        </Form.Item>
+        <Form.Item name="basis" label="判断依据" rules={[{ required: true, message: '请填写依据' }]}>
+          <Input.TextArea rows={3} placeholder="支持这一预判的理由与逻辑" />
+        </Form.Item>
+        <Form.Item name="target" label="验证标准" rules={[{ required: true, message: '请填写验证标准' }]}>
+          <Input.TextArea rows={2} placeholder="明确可量化的验证条件，e.g. COMEX黄金期货收盘价 ≥ 3,000 USD" />
+        </Form.Item>
+        <Form.Item name="timeframe" label="时间范围" rules={[{ required: true, message: '请填写时间范围' }]}>
+          <Input placeholder="e.g. 2025年Q3" />
+        </Form.Item>
+        <Form.Item name="tags" label="标签（可选）">
+          <Select
+            mode="tags"
+            placeholder="输入标签后按回车"
+            tokenSeparators={[',']}
+            style={{ width: '100%' }}
+          />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+}
+
+/* ── Main Component ─────────────────────── */
+
+interface PredictionPageProps {
+  onBack?: () => void;
+}
+
+export function PredictionPage({ onBack }: PredictionPageProps) {
   const [predictions, setPredictions] = useState<Prediction[]>(initialPredictions);
   const [filterStatus, setFilterStatus] = useState<PredictionStatus | 'all'>('all');
+  const [addOpen, setAddOpen] = useState(false);
 
   const handleTransition = (id: string, next: PredictionStatus) => {
     const now = new Date().toISOString().slice(0, 10);
@@ -27,18 +102,21 @@ export function PredictionPage() {
       if (p.id !== id) return p;
       return {
         ...p,
-        status: next,
-        activeAt:    next === 'active'                          ? now : p.activeAt,
-        resolvedAt:  (next === 'realized' || next === 'invalidated') ? now : undefined,
+        status:     next,
+        activeAt:   next === 'active' ? now : p.activeAt,
+        resolvedAt: (next === 'realized' || next === 'invalidated') ? now : undefined,
       };
     }));
+  };
+
+  const handleAdd = (p: Prediction) => {
+    setPredictions(prev => [p, ...prev]);
   };
 
   const visible = filterStatus === 'all'
     ? predictions
     : predictions.filter(p => p.status === filterStatus);
 
-  /* Count per status for tab labels */
   const counts = predictions.reduce<Record<string, number>>((acc, p) => {
     acc[p.status] = (acc[p.status] ?? 0) + 1;
     return acc;
@@ -64,10 +142,23 @@ export function PredictionPage() {
 
   return (
     <div>
-      <div style={{ marginBottom: 4 }}>
-        <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-          共 {predictions.length} 条预判 · 点击按钮流转状态
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0 12px' }}>
+        {onBack && (
+          <Button type="text" icon={<ArrowLeftOutlined />} size="small" onClick={onBack} />
+        )}
+        <Typography.Title level={5} style={{ margin: 0, flex: 1 }}>预测</Typography.Title>
+        <Typography.Text type="secondary" style={{ fontSize: 12, marginRight: 4 }}>
+          共 {predictions.length} 条
         </Typography.Text>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          size="small"
+          onClick={() => setAddOpen(true)}
+        >
+          新增
+        </Button>
       </div>
 
       {/* Filter tabs */}
@@ -94,6 +185,12 @@ export function PredictionPage() {
           ))}
         </Row>
       )}
+
+      <AddPredictionModal
+        open={addOpen}
+        onClose={() => setAddOpen(false)}
+        onAdd={handleAdd}
+      />
     </div>
   );
 }
