@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { ConfigProvider, Tabs, theme as antdTheme } from 'antd';
-import { BarChartOutlined, BankOutlined, LineChartOutlined } from '@ant-design/icons';
+import { BarChartOutlined, BankOutlined, LineChartOutlined, SettingOutlined } from '@ant-design/icons';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { MacroTab } from './components/macro/MacroTab';
 import { IndustryTab } from './components/industry/IndustryTab';
 import { CompanyTab } from './components/company/CompanyTab';
+import { SettingsTab } from './components/settings/SettingsTab';
 import { lightTheme, darkTheme } from './styles/theme';
 import { useIsMobile } from './hooks/useIsMobile';
 import './styles/global.css';
@@ -14,6 +15,7 @@ const CONTENT_ITEMS = [
   { key: 'macro', label: '宏观整体', children: <MacroTab /> },
   { key: 'industry', label: '行业', children: <IndustryTab /> },
   { key: 'company', label: '公司', children: <CompanyTab /> },
+  { key: 'settings', label: '设置', children: <SettingsTab /> },
 ];
 
 const DESKTOP_TAB_ITEMS = [
@@ -32,12 +34,18 @@ const DESKTOP_TAB_ITEMS = [
     label: <span><BankOutlined style={{ marginRight: 6 }} />公司</span>,
     children: <CompanyTab />,
   },
+  {
+    key: 'settings',
+    label: <span><SettingOutlined style={{ marginRight: 6 }} />设置</span>,
+    children: <SettingsTab />,
+  },
 ];
 
 const MOBILE_NAV = [
   { key: 'macro', Icon: LineChartOutlined, label: '宏观整体' },
   { key: 'industry', Icon: BarChartOutlined, label: '行业' },
   { key: 'company', Icon: BankOutlined, label: '公司' },
+  { key: 'settings', Icon: SettingOutlined, label: '设置' },
 ];
 
 function AppContent() {
