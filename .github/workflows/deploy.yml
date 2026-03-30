@@ -33,7 +33,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: magin-matrix
+          projectName: margin-matrix
           directory: dist
           branch: main
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: magin-matrix
+          projectName: margin-matrix
           directory: dist
           branch: nightly
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
