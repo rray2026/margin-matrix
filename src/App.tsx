@@ -3,7 +3,7 @@ import { ConfigProvider, Tabs, Dropdown, Space, Typography, theme as antdTheme }
 import {
   BarChartOutlined, BankOutlined, LineChartOutlined,
   SettingOutlined, AppstoreOutlined, DownOutlined,
-  RiseOutlined, FundOutlined, BulbOutlined,
+  RiseOutlined, FundOutlined, BulbOutlined, TeamOutlined,
 } from '@ant-design/icons';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { DashboardLayout } from './layouts/DashboardLayout';
@@ -13,13 +13,14 @@ import { CompanyTab } from './components/company/CompanyTab';
 import { SettingsTab } from './components/settings/SettingsTab';
 import { PredictionPage } from './components/investment/PredictionPage';
 import { InvestmentLogicPage } from './components/investment/InvestmentLogicPage';
+import { MarketConsensusPage } from './components/investment/MarketConsensusPage';
 import { lightTheme, darkTheme } from './styles/theme';
 import { useIsMobile } from './hooks/useIsMobile';
 import './styles/global.css';
 
 type MainTab = 'data' | 'invest' | 'settings';
 type DataTab = 'macro' | 'industry' | 'company';
-type InvestTab = 'predictions' | 'logic';
+type InvestTab = 'predictions' | 'logic' | 'consensus';
 
 const DATA_SUB_TABS = [
   { key: 'macro'    as DataTab, Icon: LineChartOutlined, label: '宏观整体' },
@@ -30,6 +31,7 @@ const DATA_SUB_TABS = [
 const INVEST_SUB_TABS = [
   { key: 'predictions' as InvestTab, Icon: FundOutlined,  label: '预测'     },
   { key: 'logic'       as InvestTab, Icon: BulbOutlined,  label: '投资逻辑' },
+  { key: 'consensus'   as InvestTab, Icon: TeamOutlined,  label: '市场共识' },
 ];
 
 const DESKTOP_DATA_TAB_ITEMS = [
@@ -39,8 +41,9 @@ const DESKTOP_DATA_TAB_ITEMS = [
 ];
 
 const DESKTOP_INVEST_TAB_ITEMS = [
-  { key: 'predictions', label: <span><FundOutlined  style={{ marginRight: 6 }} />预测</span>,     children: <PredictionPage />     },
+  { key: 'predictions', label: <span><FundOutlined  style={{ marginRight: 6 }} />预测</span>,     children: <PredictionPage />      },
   { key: 'logic',       label: <span><BulbOutlined  style={{ marginRight: 6 }} />投资逻辑</span>, children: <InvestmentLogicPage /> },
+  { key: 'consensus',   label: <span><TeamOutlined  style={{ marginRight: 6 }} />市场共识</span>, children: <MarketConsensusPage /> },
 ];
 
 const MOBILE_MAIN_NAV = [
@@ -130,6 +133,7 @@ function AppContent() {
             <div style={{ display: activeMain === 'invest' ? 'block' : 'none' }}>
               <div style={{ display: activeInvest === 'predictions' ? 'block' : 'none' }}><PredictionPage /></div>
               <div style={{ display: activeInvest === 'logic'       ? 'block' : 'none' }}><InvestmentLogicPage /></div>
+              <div style={{ display: activeInvest === 'consensus'   ? 'block' : 'none' }}><MarketConsensusPage /></div>
             </div>
             <div style={{ display: activeMain === 'settings' ? 'block' : 'none' }}><SettingsTab /></div>
 

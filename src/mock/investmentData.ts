@@ -1,4 +1,4 @@
-import type { Prediction, InvestmentLogic } from '../types/investment';
+import type { Prediction, InvestmentLogic, MarketConsensus } from '../types/investment';
 
 export const initialPredictions: Prediction[] = [
   {
@@ -192,5 +192,96 @@ export const initialLogics: InvestmentLogic[] = [
     status: 'watching',
     createdAt: '2025-03-10',
     tags: ['REITs', '消费', '类固收'],
+  },
+];
+
+export const initialConsensus: MarketConsensus[] = [
+  {
+    id: 'c1',
+    subject: '宁德时代',
+    subjectType: 'stock',
+    consensusType: 'quantitative',
+    content: '分析师普遍看好宁德时代2025年业绩修复，海外扩张与储能业务被视为核心增量，一致预期目标价区间在 170–220 元。',
+    metrics: [
+      { label: '目标价中值',    value: '¥192',  source: '彭博一致预期' },
+      { label: '2025E EPS增速', value: '+34%',  source: '中信/国君综合' },
+      { label: '2025E PE',      value: '22x',   source: '彭博一致预期' },
+    ],
+    myStance: 'agree',
+    myReason: '储能拐点已至，海外产能利用率持续爬升，估值已充分反映动力电池价格压力，向上弹性大于向下风险。',
+    status: 'tracking',
+    createdAt: '2025-02-15',
+    tags: ['动力电池', '储能', '个股'],
+  },
+  {
+    id: 'c2',
+    subject: '人工智能算力基础设施',
+    subjectType: 'industry',
+    consensusType: 'qualitative',
+    content: '市场普遍认为 AI 算力需求将持续高增，国内光模块、PCB、液冷散热等算力配套产业链将直接受益，相关标的估值溢价具有合理性。',
+    myStance: 'agree',
+    myReason: '大模型训练与推理算力需求确实爆发，但需区分直接受益（光模块/HBM）与边际受益（PCB/散热），不能一概而论。',
+    status: 'tracking',
+    createdAt: '2025-01-20',
+    tags: ['AI', '算力', '半导体'],
+  },
+  {
+    id: 'c3',
+    subject: '消费复苏',
+    subjectType: 'industry',
+    consensusType: 'qualitative',
+    content: '市场主流观点认为2025年国内消费将呈现"弱复苏"格局，政策刺激边际效果递减，居民资产负债表修复缓慢，消费升级叙事难以为继。',
+    myStance: 'disagree',
+    myReason: '低估了政府以旧换新政策的拉动效果，以及大学生就业改善对年轻消费群体的提振。服务消费韧性尤其被低估。',
+    status: 'tracking',
+    createdAt: '2025-03-01',
+    tags: ['消费', '宏观', '内需'],
+  },
+  {
+    id: 'c4',
+    subject: '美联储降息节奏',
+    subjectType: 'industry',
+    consensusType: 'quantitative',
+    content: '市场定价反映2025年美联储将降息2–3次，全年累计降息50–75bp，联邦基金利率年底落在3.75%–4.25%区间。',
+    metrics: [
+      { label: '2025年降息次数预期', value: '2–3次',      source: 'CME FedWatch' },
+      { label: '年底利率中枢',       value: '3.75%–4.25%', source: 'CME FedWatch' },
+      { label: '首次降息时点',       value: '2025年Q3',    source: '高盛研究' },
+    ],
+    myStance: 'neutral',
+    myReason: '通胀黏性难以判断，保持观望，待4月CPI数据出炉后再重新评估降息路径。',
+    status: 'tracking',
+    createdAt: '2025-03-10',
+    tags: ['美联储', '利率', '宏观'],
+  },
+  {
+    id: 'c5',
+    subject: '茅台',
+    subjectType: 'stock',
+    consensusType: 'quantitative',
+    content: '机构普遍认为茅台直营化改革已接近尾声，批价进入平稳通道，2025年营收增速将回归个位数，估值应向消费龙头靠拢而非奢侈品逻辑定价。',
+    metrics: [
+      { label: '2025E营收增速', value: '+9%',   source: '中金/海通综合' },
+      { label: '目标PE区间',   value: '22–28x', source: '主流机构一致' },
+      { label: '合理股价区间', value: '¥1,400–¥1,700', source: '彭博一致预期' },
+    ],
+    myStance: 'disagree',
+    myReason: '批价稳定是前提假设，但经济弱复苏背景下商务需求真实萎缩被低估，个位数增速预期可能仍偏乐观。',
+    status: 'tracking',
+    createdAt: '2025-02-28',
+    tags: ['白酒', '茅台', '消费', '个股'],
+  },
+  {
+    id: 'c6',
+    subject: '港股互联网板块',
+    subjectType: 'industry',
+    consensusType: 'qualitative',
+    content: '市场普遍认为港股互联网监管最严时期已过，平台经济迎来政策友好窗口，叠加AI应用变现提速，2025年估值中枢系统性抬升已获广泛认可。',
+    myStance: 'agree',
+    myReason: '逻辑成立，但节奏难判断。外资持仓仍低，南向资金是主要增量来源，关键看腾讯/阿里Q1财报指引。',
+    status: 'confirmed',
+    createdAt: '2024-12-01',
+    updatedAt: '2025-03-20',
+    tags: ['港股', '互联网', '科技'],
   },
 ];

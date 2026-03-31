@@ -88,3 +88,60 @@ export interface InvestmentLogic {
   updatedAt?: string;
   tags: string[];
 }
+
+/* ── Market Consensus ─────────────────────── */
+
+export type ConsensusStance  = 'agree' | 'disagree' | 'neutral';
+export type ConsensusSubjectType = 'stock' | 'industry';
+export type ConsensusType    = 'qualitative' | 'quantitative';
+export type ConsensusStatus  = 'tracking' | 'confirmed' | 'invalidated';
+
+export const CONSENSUS_STANCE_LABEL: Record<ConsensusStance, string> = {
+  agree:    '认同',
+  disagree: '反对',
+  neutral:  '观望',
+};
+
+export const CONSENSUS_STANCE_COLOR: Record<ConsensusStance, string> = {
+  agree:    '#52c41a',
+  disagree: '#ff4d4f',
+  neutral:  '#8c8c8c',
+};
+
+export const CONSENSUS_STATUS_LABEL: Record<ConsensusStatus, string> = {
+  tracking:    '追踪中',
+  confirmed:   '已证实',
+  invalidated: '已证伪',
+};
+
+export const CONSENSUS_STATUS_COLOR: Record<ConsensusStatus, string> = {
+  tracking:    'processing',
+  confirmed:   'success',
+  invalidated: 'error',
+};
+
+export const CONSENSUS_TYPE_LABEL: Record<ConsensusType, string> = {
+  qualitative: '定性',
+  quantitative: '定量',
+};
+
+export interface ConsensusMetric {
+  label: string;   // e.g. '目标价中值', '一致预期EPS增速'
+  value: string;   // e.g. '¥185', '+28%'
+  source?: string; // e.g. '彭博一致预期'
+}
+
+export interface MarketConsensus {
+  id: string;
+  subject: string;                  // 标的名称，e.g. '宁德时代' / '半导体行业'
+  subjectType: ConsensusSubjectType;
+  consensusType: ConsensusType;
+  content: string;                  // 共识内容描述
+  metrics?: ConsensusMetric[];      // 定量指标（consensusType=quantitative 时使用）
+  myStance: ConsensusStance;
+  myReason?: string;                // 个人立场理由
+  status: ConsensusStatus;
+  createdAt: string;
+  updatedAt?: string;
+  tags: string[];
+}
