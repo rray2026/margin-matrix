@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { List, Typography, Card, Switch } from 'antd';
 import {
   DatabaseOutlined, RightOutlined,
-  BulbOutlined, InfoCircleOutlined,
+  BulbOutlined, InfoCircleOutlined, AppstoreOutlined,
 } from '@ant-design/icons';
 import { DataSourcesPage } from './DataSourcesPage';
+import { ProductFeaturesPage } from './ProductFeaturesPage';
 import { useTheme } from '../../contexts/ThemeContext';
 
-type Page = 'settings' | 'datasources';
+type Page = 'settings' | 'datasources' | 'features';
 
 const buildTime = (() => {
   const d = new Date(__BUILD_TIME__);
@@ -21,6 +22,9 @@ export function SettingsTab() {
 
   if (page === 'datasources') {
     return <DataSourcesPage onBack={() => setPage('settings')} />;
+  }
+  if (page === 'features') {
+    return <ProductFeaturesPage onBack={() => setPage('settings')} />;
   }
 
   return (
@@ -60,13 +64,22 @@ export function SettingsTab() {
         </Typography.Text>
         <Card size="small" styles={{ body: { padding: 0 } }}>
           <List
-            dataSource={[{
-              key: 'datasources' as Page,
-              icon: <DatabaseOutlined style={{ fontSize: 18, color: '#1677ff' }} />,
-              iconBg: 'rgba(22,119,255,0.1)',
-              title: '数据来源',
-              description: '查看所有数据源、更新频率及最近更新日期',
-            }]}
+            dataSource={[
+              {
+                key: 'features' as Page,
+                icon: <AppstoreOutlined style={{ fontSize: 18, color: '#722ed1' }} />,
+                iconBg: 'rgba(114,46,209,0.1)',
+                title: '产品功能',
+                description: '了解各模块的功能介绍与使用方式',
+              },
+              {
+                key: 'datasources' as Page,
+                icon: <DatabaseOutlined style={{ fontSize: 18, color: '#1677ff' }} />,
+                iconBg: 'rgba(22,119,255,0.1)',
+                title: '数据来源',
+                description: '查看所有数据源、更新频率及最近更新日期',
+              },
+            ]}
             renderItem={item => (
               <List.Item
                 onClick={() => setPage(item.key)}
