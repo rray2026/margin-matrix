@@ -34,18 +34,6 @@ const INVEST_SUB_TABS = [
   { key: 'consensus'   as InvestTab, Icon: TeamOutlined,  label: '市场共识' },
 ];
 
-const DESKTOP_DATA_TAB_ITEMS = [
-  { key: 'macro',    label: <span><LineChartOutlined style={{ marginRight: 6 }} />宏观整体</span>, children: <MacroTab />    },
-  { key: 'industry', label: <span><BarChartOutlined  style={{ marginRight: 6 }} />行业</span>,     children: <IndustryTab /> },
-  { key: 'company',  label: <span><BankOutlined      style={{ marginRight: 6 }} />公司</span>,     children: <CompanyTab />  },
-];
-
-const DESKTOP_INVEST_TAB_ITEMS = [
-  { key: 'predictions', label: <span><FundOutlined  style={{ marginRight: 6 }} />预测</span>,     children: <PredictionPage />      },
-  { key: 'logic',       label: <span><BulbOutlined  style={{ marginRight: 6 }} />投资逻辑</span>, children: <InvestmentLogicPage /> },
-  { key: 'consensus',   label: <span><TeamOutlined  style={{ marginRight: 6 }} />市场共识</span>, children: <MarketConsensusPage /> },
-];
-
 const MOBILE_MAIN_NAV = [
   { key: 'data'     as MainTab, Icon: AppstoreOutlined, label: '数据'  },
   { key: 'invest'   as MainTab, Icon: RiseOutlined,     label: '投资'  },
@@ -67,6 +55,10 @@ function AppContent() {
 
   const currentDataSubLabel   = DATA_SUB_TABS.find(t => t.key === activeData)?.label     ?? '宏观整体';
   const currentInvestSubLabel = INVEST_SUB_TABS.find(t => t.key === activeInvest)?.label ?? '预测';
+
+  const sidebarBorderColor = isDark ? '#303030' : '#f0f0f0';
+  const activeNavBg        = isDark ? 'rgba(22,119,255,0.18)' : 'rgba(22,119,255,0.1)';
+  const inactiveNavColor   = isDark ? 'rgba(255,255,255,0.65)' : '#595959';
 
   // Mobile header left area
   const mobileHeaderLeft = activeMain === 'data' ? (
@@ -114,6 +106,64 @@ function AppContent() {
       {MAIN_TAB_LABEL[activeMain]}
     </Typography.Title>
   );
+
+  /** Renders a sidebar + content layout for data/invest sub-navigation on desktop */
+  function DesktopSubNav<K extends string>({
+    tabs,
+    activeKey,
+    setActive,
+    children,
+  }: {
+    tabs: { key: K; Icon: React.ComponentType<{ style?: React.CSSProperties }>; label: string }[];
+    activeKey: K;
+    setActive: (k: K) => void;
+    children: React.ReactNode;
+  }) {
+    return (
+      <div style={{ display: 'flex', paddingTop: 8, minHeight: 'calc(100vh - 170px)' }}>
+        {/* Sidebar */}
+        <div style={{
+          width: 160,
+          flexShrink: 0,
+          borderRight: `1px solid ${sidebarBorderColor}`,
+          paddingRight: 8,
+          paddingTop: 4,
+        }}>
+          {tabs.map(({ key, Icon, label }) => {
+            const isActive = activeKey === key;
+            return (
+              <div
+                key={key}
+                className="sidebar-nav-item"
+                onClick={() => setActive(key)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 9,
+                  padding: '9px 12px',
+                  borderRadius: 8,
+                  cursor: 'pointer',
+                  marginBottom: 2,
+                  background: isActive ? activeNavBg : 'transparent',
+                  color: isActive ? '#1677ff' : inactiveNavColor,
+                  fontWeight: isActive ? 500 : 400,
+                  fontSize: 14,
+                  transition: 'background 0.15s, color 0.15s',
+                }}
+              >
+                <Icon style={{ fontSize: 16 }} />
+                {label}
+              </div>
+            );
+          })}
+        </div>
+        {/* Content */}
+        <div style={{ flex: 1, paddingLeft: 24, minWidth: 0 }}>
+          {children}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <ConfigProvider
@@ -166,24 +216,30 @@ function AppContent() {
                 key: 'data',
                 label: <span><AppstoreOutlined style={{ marginRight: 6 }} />数据</span>,
                 children: (
-                  <Tabs
+                  <DesktopSubNav
+                    tabs={DATA_SUB_TABS}
                     activeKey={activeData}
-                    onChange={key => setActiveData(key as DataTab)}
-                    tabBarStyle={{ margin: '8px 0 16px' }}
-                    items={DESKTOP_DATA_TAB_ITEMS}
-                  />
+                    setActive={setActiveData}
+                  >
+                    <div style={{ display: activeData === 'macro'    ? 'block' : 'none' }}><MacroTab /></div>
+                    <div style={{ display: activeData === 'industry' ? 'block' : 'none' }}><IndustryTab /></div>
+                    <div style={{ display: activeData === 'company'  ? 'block' : 'none' }}><CompanyTab /></div>
+                  </DesktopSubNav>
                 ),
               },
               {
                 key: 'invest',
                 label: <span><RiseOutlined style={{ marginRight: 6 }} />投资</span>,
                 children: (
-                  <Tabs
+                  <DesktopSubNav
+                    tabs={INVEST_SUB_TABS}
                     activeKey={activeInvest}
-                    onChange={key => setActiveInvest(key as InvestTab)}
-                    tabBarStyle={{ margin: '8px 0 16px' }}
-                    items={DESKTOP_INVEST_TAB_ITEMS}
-                  />
+                    setActive={setActiveInvest}
+                  >
+                    <div style={{ display: activeInvest === 'predictions' ? 'block' : 'none' }}><PredictionPage /></div>
+                    <div style={{ display: activeInvest === 'logic'       ? 'block' : 'none' }}><InvestmentLogicPage /></div>
+                    <div style={{ display: activeInvest === 'consensus'   ? 'block' : 'none' }}><MarketConsensusPage /></div>
+                  </DesktopSubNav>
                 ),
               },
               {

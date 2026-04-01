@@ -177,23 +177,26 @@ const columns: ColumnsType<DataSource> = [
 
 interface DataSourcesPageProps {
   onBack: () => void;
+  hideBack?: boolean;
 }
 
-export function DataSourcesPage({ onBack }: DataSourcesPageProps) {
+export function DataSourcesPage({ onBack, hideBack }: DataSourcesPageProps) {
   return (
     <div>
       <div style={{
         display: 'flex',
         alignItems: 'center',
         gap: 8,
-        padding: '8px 4px 12px',
+        padding: hideBack ? '0 4px 16px' : '8px 4px 12px',
       }}>
-        <Button
-          type="text"
-          icon={<ArrowLeftOutlined />}
-          onClick={onBack}
-          size="small"
-        />
+        {!hideBack && (
+          <Button
+            type="text"
+            icon={<ArrowLeftOutlined />}
+            onClick={onBack}
+            size="small"
+          />
+        )}
         <Typography.Title level={5} style={{ margin: 0 }}>
           数据来源
         </Typography.Title>
