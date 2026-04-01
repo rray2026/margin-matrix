@@ -387,10 +387,7 @@ function AppContent() {
               <div style={{ display: activeInvest === 'consensus'   ? 'block' : 'none' }}><MarketConsensusPage /></div>
             </div>
             <div style={{ display: activeMain === 'settings' ? 'block' : 'none' }}>
-              <SettingsTab
-                desktopSection={activeSettings}
-                onDesktopSectionChange={setActiveSettings}
-              />
+              <SettingsTab desktopSection={activeSettings} />
             </div>
           </>
         )}
