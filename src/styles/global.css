@@ -81,21 +81,49 @@ body {
 ::-webkit-scrollbar-thumb { background: #434343; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #5a5a5a; }
 
-/* ── Ant Design tab overrides ────────────── */
+/* ── Desktop top navigation items ───────── */
 
-.ant-tabs-nav {
-  margin-bottom: 0 !important;
-}
-
-/* Desktop tabs */
-.desktop-tabs .ant-tabs-tab {
+.desktop-nav-item {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
   font-size: 14px;
-  padding: 8px 16px;
+  font-weight: 500;
+  user-select: none;
+  transition: background 0.15s, color 0.15s;
 }
 
-/* ── Desktop sidebar navigation ─────────── */
+.desktop-nav-item:hover {
+  background: rgba(22, 119, 255, 0.08);
+  color: #1677ff !important;
+}
 
-.sidebar-nav-item:hover,
+.desktop-nav-item.active {
+  background: rgba(22, 119, 255, 0.1);
+}
+
+.desktop-nav-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.desktop-nav-icon-btn:hover {
+  background: rgba(22, 119, 255, 0.08);
+  color: #1677ff !important;
+}
+
+/* ── Settings panel sidebar nav ─────────── */
+
 .settings-nav-item:hover {
   background: rgba(22, 119, 255, 0.06) !important;
 }

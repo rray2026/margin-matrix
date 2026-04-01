@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ConfigProvider, Tabs, Dropdown, Space, Typography, theme as antdTheme } from 'antd';
+import { ConfigProvider, Dropdown, Space, Typography, theme as antdTheme } from 'antd';
 import {
   BarChartOutlined, BankOutlined, LineChartOutlined,
   SettingOutlined, AppstoreOutlined, DownOutlined,
@@ -49,18 +49,76 @@ const MAIN_TAB_LABEL: Record<MainTab, string> = {
 function AppContent() {
   const { isDark } = useTheme();
   const isMobile = useIsMobile();
-  const [activeMain, setActiveMain] = useState<MainTab>('data');
-  const [activeData, setActiveData] = useState<DataTab>('macro');
+  const [activeMain, setActiveMain]   = useState<MainTab>('data');
+  const [activeData, setActiveData]   = useState<DataTab>('macro');
   const [activeInvest, setActiveInvest] = useState<InvestTab>('predictions');
 
   const currentDataSubLabel   = DATA_SUB_TABS.find(t => t.key === activeData)?.label     ?? '宏观整体';
   const currentInvestSubLabel = INVEST_SUB_TABS.find(t => t.key === activeInvest)?.label ?? '预测';
 
-  const sidebarBorderColor = isDark ? '#303030' : '#f0f0f0';
-  const activeNavBg        = isDark ? 'rgba(22,119,255,0.18)' : 'rgba(22,119,255,0.1)';
-  const inactiveNavColor   = isDark ? 'rgba(255,255,255,0.65)' : '#595959';
+  const navTextColor = isDark ? 'rgba(255,255,255,0.75)' : '#262626';
 
-  // Mobile header left area
+  /* ── Desktop top navigation ── */
+  const desktopNav = (
+    <nav style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Dropdown
+        trigger={['hover']}
+        menu={{
+          selectedKeys: activeMain === 'data' ? [activeData] : [],
+          onClick: ({ key }) => { setActiveMain('data'); setActiveData(key as DataTab); },
+          items: DATA_SUB_TABS.map(({ key, Icon, label }) => ({
+            key,
+            icon: <Icon />,
+            label,
+          })),
+        }}
+      >
+        <div
+          className={`desktop-nav-item${activeMain === 'data' ? ' active' : ''}`}
+          onClick={() => setActiveMain('data')}
+          style={{ color: activeMain === 'data' ? '#1677ff' : navTextColor }}
+        >
+          数据
+          <DownOutlined style={{ fontSize: 10, marginLeft: 4, opacity: 0.6 }} />
+        </div>
+      </Dropdown>
+
+      <Dropdown
+        trigger={['hover']}
+        menu={{
+          selectedKeys: activeMain === 'invest' ? [activeInvest] : [],
+          onClick: ({ key }) => { setActiveMain('invest'); setActiveInvest(key as InvestTab); },
+          items: INVEST_SUB_TABS.map(({ key, Icon, label }) => ({
+            key,
+            icon: <Icon />,
+            label,
+          })),
+        }}
+      >
+        <div
+          className={`desktop-nav-item${activeMain === 'invest' ? ' active' : ''}`}
+          onClick={() => setActiveMain('invest')}
+          style={{ color: activeMain === 'invest' ? '#1677ff' : navTextColor }}
+        >
+          投资
+          <DownOutlined style={{ fontSize: 10, marginLeft: 4, opacity: 0.6 }} />
+        </div>
+      </Dropdown>
+    </nav>
+  );
+
+  const desktopRight = (
+    <button
+      className={`desktop-nav-icon-btn${activeMain === 'settings' ? ' active' : ''}`}
+      onClick={() => setActiveMain('settings')}
+      title="设置"
+      style={{ color: activeMain === 'settings' ? '#1677ff' : navTextColor }}
+    >
+      <SettingOutlined style={{ fontSize: 18 }} />
+    </button>
+  );
+
+  /* ── Mobile header left area ── */
   const mobileHeaderLeft = activeMain === 'data' ? (
     <Dropdown
       menu={{
@@ -107,64 +165,6 @@ function AppContent() {
     </Typography.Title>
   );
 
-  /** Renders a sidebar + content layout for data/invest sub-navigation on desktop */
-  function DesktopSubNav<K extends string>({
-    tabs,
-    activeKey,
-    setActive,
-    children,
-  }: {
-    tabs: { key: K; Icon: React.ComponentType<{ style?: React.CSSProperties }>; label: string }[];
-    activeKey: K;
-    setActive: (k: K) => void;
-    children: React.ReactNode;
-  }) {
-    return (
-      <div style={{ display: 'flex', paddingTop: 8, minHeight: 'calc(100vh - 170px)' }}>
-        {/* Sidebar */}
-        <div style={{
-          width: 160,
-          flexShrink: 0,
-          borderRight: `1px solid ${sidebarBorderColor}`,
-          paddingRight: 8,
-          paddingTop: 4,
-        }}>
-          {tabs.map(({ key, Icon, label }) => {
-            const isActive = activeKey === key;
-            return (
-              <div
-                key={key}
-                className="sidebar-nav-item"
-                onClick={() => setActive(key)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 9,
-                  padding: '9px 12px',
-                  borderRadius: 8,
-                  cursor: 'pointer',
-                  marginBottom: 2,
-                  background: isActive ? activeNavBg : 'transparent',
-                  color: isActive ? '#1677ff' : inactiveNavColor,
-                  fontWeight: isActive ? 500 : 400,
-                  fontSize: 14,
-                  transition: 'background 0.15s, color 0.15s',
-                }}
-              >
-                <Icon style={{ fontSize: 16 }} />
-                {label}
-              </div>
-            );
-          })}
-        </div>
-        {/* Content */}
-        <div style={{ flex: 1, paddingLeft: 24, minWidth: 0 }}>
-          {children}
-        </div>
-      </div>
-    );
-  }
-
   return (
     <ConfigProvider
       theme={{
@@ -172,7 +172,11 @@ function AppContent() {
         algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
       }}
     >
-      <DashboardLayout headerLeftContent={isMobile ? mobileHeaderLeft : undefined}>
+      <DashboardLayout
+        headerLeftContent={isMobile ? mobileHeaderLeft : undefined}
+        desktopNav={isMobile ? undefined : desktopNav}
+        desktopRight={isMobile ? undefined : desktopRight}
+      >
         {isMobile ? (
           <>
             <div style={{ display: activeMain === 'data' ? 'block' : 'none' }}>
@@ -206,49 +210,20 @@ function AppContent() {
             </nav>
           </>
         ) : (
-          <Tabs
-            activeKey={activeMain}
-            onChange={key => setActiveMain(key as MainTab)}
-            className="desktop-tabs"
-            tabBarStyle={{ marginBottom: 0 }}
-            items={[
-              {
-                key: 'data',
-                label: <span><AppstoreOutlined style={{ marginRight: 6 }} />数据</span>,
-                children: (
-                  <DesktopSubNav
-                    tabs={DATA_SUB_TABS}
-                    activeKey={activeData}
-                    setActive={setActiveData}
-                  >
-                    <div style={{ display: activeData === 'macro'    ? 'block' : 'none' }}><MacroTab /></div>
-                    <div style={{ display: activeData === 'industry' ? 'block' : 'none' }}><IndustryTab /></div>
-                    <div style={{ display: activeData === 'company'  ? 'block' : 'none' }}><CompanyTab /></div>
-                  </DesktopSubNav>
-                ),
-              },
-              {
-                key: 'invest',
-                label: <span><RiseOutlined style={{ marginRight: 6 }} />投资</span>,
-                children: (
-                  <DesktopSubNav
-                    tabs={INVEST_SUB_TABS}
-                    activeKey={activeInvest}
-                    setActive={setActiveInvest}
-                  >
-                    <div style={{ display: activeInvest === 'predictions' ? 'block' : 'none' }}><PredictionPage /></div>
-                    <div style={{ display: activeInvest === 'logic'       ? 'block' : 'none' }}><InvestmentLogicPage /></div>
-                    <div style={{ display: activeInvest === 'consensus'   ? 'block' : 'none' }}><MarketConsensusPage /></div>
-                  </DesktopSubNav>
-                ),
-              },
-              {
-                key: 'settings',
-                label: <span><SettingOutlined style={{ marginRight: 6 }} />设置</span>,
-                children: <div style={{ paddingTop: 16 }}><SettingsTab /></div>,
-              },
-            ]}
-          />
+          /* Desktop: direct content, no Tabs wrapper */
+          <>
+            <div style={{ display: activeMain === 'data' ? 'block' : 'none' }}>
+              <div style={{ display: activeData === 'macro'    ? 'block' : 'none' }}><MacroTab /></div>
+              <div style={{ display: activeData === 'industry' ? 'block' : 'none' }}><IndustryTab /></div>
+              <div style={{ display: activeData === 'company'  ? 'block' : 'none' }}><CompanyTab /></div>
+            </div>
+            <div style={{ display: activeMain === 'invest' ? 'block' : 'none' }}>
+              <div style={{ display: activeInvest === 'predictions' ? 'block' : 'none' }}><PredictionPage /></div>
+              <div style={{ display: activeInvest === 'logic'       ? 'block' : 'none' }}><InvestmentLogicPage /></div>
+              <div style={{ display: activeInvest === 'consensus'   ? 'block' : 'none' }}><MarketConsensusPage /></div>
+            </div>
+            <div style={{ display: activeMain === 'settings' ? 'block' : 'none' }}><SettingsTab /></div>
+          </>
         )}
       </DashboardLayout>
     </ConfigProvider>
