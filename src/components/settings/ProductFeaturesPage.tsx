@@ -105,14 +105,15 @@ const FEATURES: Feature[] = [
 
 interface Props {
   onBack: () => void;
+  hideBack?: boolean;
 }
 
-export function ProductFeaturesPage({ onBack }: Props) {
+export function ProductFeaturesPage({ onBack, hideBack }: Props) {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0 16px' }}>
-        <Button type="text" icon={<ArrowLeftOutlined />} size="small" onClick={onBack} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: hideBack ? '0 0 16px' : '4px 0 16px' }}>
+        {!hideBack && <Button type="text" icon={<ArrowLeftOutlined />} size="small" onClick={onBack} />}
         <Title level={5} style={{ margin: 0 }}>产品功能</Title>
       </div>
 
