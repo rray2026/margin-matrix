@@ -1,6 +1,5 @@
 import { Layout, Typography, Space } from 'antd';
 import { FundOutlined } from '@ant-design/icons';
-import { ThemeToggle } from '../components/common/ThemeToggle';
 import { useTheme } from '../contexts/ThemeContext';
 import { useIsMobile } from '../hooks/useIsMobile';
 import type { ReactNode } from 'react';
@@ -9,9 +8,11 @@ const { Header, Content } = Layout;
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  /** On mobile, replaces the default app title area with custom content */
+  headerLeftContent?: ReactNode;
 }
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export function DashboardLayout({ children, headerLeftContent }: DashboardLayoutProps) {
   const { isDark } = useTheme();
   const isMobile = useIsMobile();
 
@@ -34,28 +35,25 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         lineHeight: isMobile ? '48px' : '56px',
         boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
       }}>
-        <Space size={8} align="center">
-          <FundOutlined style={{ fontSize: isMobile ? 18 : 22, color: '#1677ff' }} />
-          <Typography.Title
-            level={isMobile ? 5 : 5}
-            style={{ margin: 0, fontSize: isMobile ? 15 : 16 }}
-          >
-            基金研究仪表盘
-          </Typography.Title>
-          {!isMobile && (
-            <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-              Fund Research Dashboard
-            </Typography.Text>
-          )}
-        </Space>
-        <Space size={isMobile ? 8 : 12} align="center">
-          {!isMobile && (
-            <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-              数据更新：2025-03-29
-            </Typography.Text>
-          )}
-          <ThemeToggle />
-        </Space>
+        {isMobile && headerLeftContent ? (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {headerLeftContent}
+          </div>
+        ) : (
+          <Space size={8} align="center">
+            <FundOutlined style={{ fontSize: isMobile ? 18 : 22, color: '#1677ff' }} />
+            <Typography.Title level={5} style={{ margin: 0, fontSize: isMobile ? 15 : 16 }}>
+              基金研究仪表盘
+            </Typography.Title>
+            {!isMobile && (
+              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                Fund Research Dashboard
+              </Typography.Text>
+            )}
+          </Space>
+        )}
+        {/* Right side intentionally empty — theme toggle moved to Settings */}
+        <div />
       </Header>
 
       <Content style={{ background: isDark ? '#141414' : '#f0f2f5' }}>

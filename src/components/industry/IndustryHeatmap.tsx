@@ -3,6 +3,7 @@ import { Card } from 'antd';
 import { useTheme } from '../../contexts/ThemeContext';
 import { getChartStyles } from '../../styles/theme';
 import { useChartHeight } from '../../hooks/useChartHeight';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import type { HeatmapCell, SectorName } from '../../types/industry';
 
 const SECTORS: SectorName[] = [
@@ -24,6 +25,7 @@ export function IndustryHeatmap({ data }: IndustryHeatmapProps) {
   const { isDark } = useTheme();
   const s = getChartStyles(isDark);
   const height = useChartHeight(520, 400);
+  const isMobile = useIsMobile();
 
   const heatmapData = data.map(cell => [
     PERIODS.indexOf(cell.period),
@@ -41,17 +43,23 @@ export function IndustryHeatmap({ data }: IndustryHeatmapProps) {
         return `${SECTORS[sectorIdx]} · ${PERIODS[periodIdx]}<br/>涨跌幅: ${val > 0 ? '+' : ''}${val}%`;
       },
     },
-    grid: { ...s.baseGrid, top: 50, bottom: 30, left: 90, right: 120 },
+    grid: {
+      ...s.baseGrid,
+      top: 50,
+      bottom: 30,
+      left: isMobile ? 56 : 90,
+      right: isMobile ? 54 : 120,
+    },
     xAxis: {
       type: 'category',
       data: PERIODS,
-      axisLabel: s.axisLabelStyle,
+      axisLabel: { ...s.axisLabelStyle, fontSize: isMobile ? 10 : 12 },
       splitArea: { show: true },
     },
     yAxis: {
       type: 'category',
       data: SECTORS,
-      axisLabel: { ...s.axisLabelStyle, fontSize: 11 },
+      axisLabel: { ...s.axisLabelStyle, fontSize: isMobile ? 10 : 11 },
       splitArea: { show: true },
     },
     visualMap: {
@@ -59,18 +67,24 @@ export function IndustryHeatmap({ data }: IndustryHeatmapProps) {
       max: 25,
       calculable: true,
       orient: 'vertical',
-      right: 10,
+      right: isMobile ? 4 : 10,
       top: 'center',
+      itemWidth: isMobile ? 12 : 20,
+      itemHeight: isMobile ? 80 : 120,
       inRange: {
         color: ['#52c41a', '#f0f0f0', '#f5222d'],
       },
-      textStyle: { color: s.textColor },
+      textStyle: { color: s.textColor, fontSize: isMobile ? 10 : 12 },
     },
     series: [
       {
         type: 'heatmap',
         data: heatmapData,
-        label: { show: true, fontSize: 9, formatter: (p: { value: number[] }) => `${p.value[2]}%` },
+        label: {
+          show: !isMobile,
+          fontSize: 9,
+          formatter: (p: { value: number[] }) => `${p.value[2]}%`,
+        },
         emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.5)' } },
       },
     ],
