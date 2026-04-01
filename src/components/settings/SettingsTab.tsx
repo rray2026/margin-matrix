@@ -1,16 +1,17 @@
-import { useState } from 'react';
 import { List, Typography, Card, Switch } from 'antd';
 import {
   DatabaseOutlined, RightOutlined,
   BulbOutlined, InfoCircleOutlined, AppstoreOutlined,
 } from '@ant-design/icons';
+import { useState } from 'react';
 import { DataSourcesPage } from './DataSourcesPage';
 import { ProductFeaturesPage } from './ProductFeaturesPage';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useIsMobile } from '../../hooks/useIsMobile';
 
+export type SettingsSection = 'appearance' | 'features' | 'datasources';
+
 type MobilePage = 'settings' | 'datasources' | 'features';
-type DesktopSection = 'appearance' | 'features' | 'datasources';
 
 const buildTime = (() => {
   const d = new Date(__BUILD_TIME__);
@@ -18,27 +19,51 @@ const buildTime = (() => {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 })();
 
-const DESKTOP_NAV = [
+const DESKTOP_NAV: Array<{
+  key: SettingsSection;
+  Icon: React.ComponentType<{ style?: React.CSSProperties }>;
+  label: string;
+  desc: string;
+  color: string;
+  bg: string;
+}> = [
   {
-    key: 'appearance' as DesktopSection,
-    icon: <BulbOutlined style={{ fontSize: 16 }} />,
+    key: 'appearance',
+    Icon: BulbOutlined,
     label: '外观',
+    desc: '主题与显示偏好设置',
+    color: '#faad14',
+    bg: 'rgba(250,173,20,0.12)',
   },
   {
-    key: 'features' as DesktopSection,
-    icon: <AppstoreOutlined style={{ fontSize: 16 }} />,
+    key: 'features',
+    Icon: AppstoreOutlined,
     label: '产品功能',
+    desc: '了解各模块的功能介绍',
+    color: '#722ed1',
+    bg: 'rgba(114,46,209,0.1)',
   },
   {
-    key: 'datasources' as DesktopSection,
-    icon: <DatabaseOutlined style={{ fontSize: 16 }} />,
+    key: 'datasources',
+    Icon: DatabaseOutlined,
     label: '数据来源',
+    desc: '查看数据源与更新频率',
+    color: '#1677ff',
+    bg: 'rgba(22,119,255,0.1)',
   },
 ];
 
-export function SettingsTab() {
+interface SettingsTabProps {
+  /** Desktop controlled section (lifted to App.tsx) */
+  desktopSection?: SettingsSection;
+  onDesktopSectionChange?: (section: SettingsSection) => void;
+}
+
+export function SettingsTab({
+  desktopSection = 'appearance',
+  onDesktopSectionChange,
+}: SettingsTabProps) {
   const [mobilePage, setMobilePage] = useState<MobilePage>('settings');
-  const [desktopSection, setDesktopSection] = useState<DesktopSection>('appearance');
   const { isDark, toggleTheme } = useTheme();
   const isMobile = useIsMobile();
 
@@ -53,8 +78,6 @@ export function SettingsTab() {
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-
-        {/* 外观 */}
         <div>
           <Typography.Text type="secondary" style={{ fontSize: 12, display: 'block', padding: '0 0 8px' }}>
             外观
@@ -81,7 +104,6 @@ export function SettingsTab() {
           </Card>
         </div>
 
-        {/* 数据与信息 */}
         <div>
           <Typography.Text type="secondary" style={{ fontSize: 12, display: 'block', padding: '0 0 8px' }}>
             数据与信息
@@ -129,7 +151,6 @@ export function SettingsTab() {
           </Card>
         </div>
 
-        {/* 关于 */}
         <div>
           <Typography.Text type="secondary" style={{ fontSize: 12, display: 'block', padding: '0 0 8px' }}>
             关于
@@ -152,116 +173,131 @@ export function SettingsTab() {
             </div>
           </Card>
         </div>
-
       </div>
     );
   }
 
   /* ── Desktop layout (two-panel) ── */
-  const navBorderColor = isDark ? '#303030' : '#f0f0f0';
-  const activeNavBg    = isDark ? 'rgba(22,119,255,0.18)' : 'rgba(22,119,255,0.1)';
-  const inactiveColor  = isDark ? 'rgba(255,255,255,0.65)' : '#595959';
+  const borderColor   = isDark ? '#303030' : '#f0f0f0';
+  const activeNavBg   = isDark ? 'rgba(22,119,255,0.16)' : 'rgba(22,119,255,0.08)';
+  const inactiveColor = isDark ? 'rgba(255,255,255,0.65)' : '#595959';
+  const inactiveDesc  = isDark ? 'rgba(255,255,255,0.35)' : '#8c8c8c';
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - 200px)', gap: 0 }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - 200px)' }}>
 
       {/* Left navigation panel */}
       <div style={{
-        width: 200,
+        width: 220,
         flexShrink: 0,
-        borderRight: `1px solid ${navBorderColor}`,
-        paddingRight: 12,
+        borderRight: `1px solid ${borderColor}`,
+        paddingRight: 8,
+        paddingTop: 4,
         display: 'flex',
         flexDirection: 'column',
       }}>
-        <Typography.Text type="secondary" style={{ fontSize: 11, display: 'block', padding: '0 4px 8px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-          设置
-        </Typography.Text>
-
-        {DESKTOP_NAV.map(({ key, icon, label }) => {
+        {DESKTOP_NAV.map(({ key, Icon, label, desc, color, bg }) => {
           const isActive = desktopSection === key;
           return (
             <div
               key={key}
               className="settings-nav-item"
-              onClick={() => setDesktopSection(key)}
+              onClick={() => onDesktopSectionChange?.(key)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 10,
-                padding: '9px 12px',
-                borderRadius: 8,
+                gap: 12,
+                padding: '10px 12px',
+                borderRadius: 9,
                 cursor: 'pointer',
                 marginBottom: 2,
                 background: isActive ? activeNavBg : 'transparent',
-                color: isActive ? '#1677ff' : inactiveColor,
-                fontWeight: isActive ? 500 : 400,
-                fontSize: 14,
-                transition: 'background 0.15s, color 0.15s',
+                transition: 'background 0.15s',
               }}
             >
-              {icon}
-              {label}
+              <div style={{
+                width: 36, height: 36, borderRadius: 8,
+                background: isActive ? bg : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)'),
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0,
+                transition: 'background 0.15s',
+              }}>
+                <Icon style={{ fontSize: 17, color: isActive ? color : inactiveColor }} />
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <div style={{
+                  fontWeight: isActive ? 500 : 400,
+                  fontSize: 14,
+                  lineHeight: '20px',
+                  color: isActive ? '#1677ff' : inactiveColor,
+                }}>
+                  {label}
+                </div>
+                <div style={{ fontSize: 12, lineHeight: '17px', color: inactiveDesc }}>
+                  {desc}
+                </div>
+              </div>
             </div>
           );
         })}
-
-        {/* About info at bottom */}
-        <div style={{ marginTop: 'auto', paddingTop: 24 }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '8px 12px',
-            borderRadius: 8,
-            background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
-          }}>
-            <InfoCircleOutlined style={{ fontSize: 14, color: '#52c41a' }} />
-            <div>
-              <div style={{ fontSize: 12, fontWeight: 500, color: inactiveColor }}>构建时间</div>
-              <Typography.Text type="secondary" style={{ fontSize: 11 }}>
-                {buildTime}
-              </Typography.Text>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Right content panel */}
-      <div style={{ flex: 1, paddingLeft: 32, minWidth: 0, paddingTop: 4 }}>
-        {desktopSection === 'appearance' && (
-          <div style={{ maxWidth: 560 }}>
-            <Typography.Title level={5} style={{ margin: '0 0 20px' }}>外观</Typography.Title>
-            <Card size="small" styles={{ body: { padding: 0 } }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{
-                    width: 40, height: 40, borderRadius: 10,
-                    background: 'rgba(250,173,20,0.12)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <BulbOutlined style={{ fontSize: 20, color: '#faad14' }} />
+      <div style={{
+        flex: 1,
+        paddingLeft: 32,
+        minWidth: 0,
+        paddingTop: 4,
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+        <div style={{ flex: 1 }}>
+          {desktopSection === 'appearance' && (
+            <div style={{ maxWidth: 560 }}>
+              <Typography.Title level={5} style={{ margin: '0 0 20px' }}>外观</Typography.Title>
+              <Card size="small" styles={{ body: { padding: 0 } }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <div style={{
+                      width: 40, height: 40, borderRadius: 10,
+                      background: 'rgba(250,173,20,0.12)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <BulbOutlined style={{ fontSize: 20, color: '#faad14' }} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 500, fontSize: 15 }}>深色模式</div>
+                      <Typography.Text type="secondary" style={{ fontSize: 13 }}>
+                        {isDark ? '当前：深色主题' : '当前：浅色主题'}
+                      </Typography.Text>
+                    </div>
                   </div>
-                  <div>
-                    <div style={{ fontWeight: 500, fontSize: 15 }}>深色模式</div>
-                    <Typography.Text type="secondary" style={{ fontSize: 13 }}>
-                      {isDark ? '当前：深色主题' : '当前：浅色主题'}
-                    </Typography.Text>
-                  </div>
+                  <Switch checked={isDark} onChange={toggleTheme} />
                 </div>
-                <Switch checked={isDark} onChange={toggleTheme} />
-              </div>
-            </Card>
-          </div>
-        )}
+              </Card>
+            </div>
+          )}
 
-        {desktopSection === 'features' && (
-          <ProductFeaturesPage onBack={() => {}} hideBack />
-        )}
+          {desktopSection === 'features' && (
+            <ProductFeaturesPage onBack={() => {}} hideBack />
+          )}
 
-        {desktopSection === 'datasources' && (
-          <DataSourcesPage onBack={() => {}} hideBack />
-        )}
+          {desktopSection === 'datasources' && (
+            <DataSourcesPage onBack={() => {}} hideBack />
+          )}
+        </div>
+
+        {/* Build time footer */}
+        <div style={{
+          marginTop: 40,
+          paddingTop: 16,
+          borderTop: `1px solid ${borderColor}`,
+          fontSize: 12,
+          color: isDark ? 'rgba(255,255,255,0.22)' : '#c8c8c8',
+          letterSpacing: '0.2px',
+        }}>
+          构建时间：{buildTime}
+        </div>
       </div>
 
     </div>
