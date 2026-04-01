@@ -13,14 +13,14 @@ body {
 /* ── Layout ─────────────────────────────── */
 
 .dashboard-content {
-  max-width: 1600px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 12px;
 }
 
 @media (min-width: 768px) {
   .dashboard-content {
-    padding: 24px;
+    padding: 20px 24px;
   }
 }
 
@@ -62,15 +62,15 @@ body {
 .change-negative { color: #52c41a; }
 .change-neutral  { color: #8c8c8c; }
 
-/* ── Bottom nav safe area (iOS) ─────────── */
+/* ── Bottom nav safe area spacer (mobile) ── */
 
 .bottom-nav-placeholder {
-  height: 60px;
+  height: 68px;
 }
 
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .bottom-nav-placeholder {
-    height: calc(60px + env(safe-area-inset-bottom));
+    height: calc(68px + env(safe-area-inset-bottom));
   }
 }
 
@@ -81,54 +81,11 @@ body {
 ::-webkit-scrollbar-thumb { background: #434343; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #5a5a5a; }
 
-/* ── Ant Design tab overrides for mobile ─── */
+/* Hide scrollbar on SectionNav strip */
+.section-nav::-webkit-scrollbar { display: none; }
 
-.ant-tabs-nav {
-  margin-bottom: 0 !important;
-}
+/* ── Sidebar nav button reset ────────────── */
 
-/* Bottom tab bar (mobile) */
-.mobile-tabs .ant-tabs-nav {
-  position: fixed !important;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-  border-top: 1px solid rgba(128, 128, 128, 0.2);
-  border-bottom: none !important;
-  margin: 0 !important;
-}
-
-.mobile-tabs .ant-tabs-nav-wrap {
-  justify-content: space-around;
-}
-
-.mobile-tabs .ant-tabs-tab {
-  flex: 1;
-  justify-content: center;
-  margin: 0 !important;
-  padding: 10px 0 !important;
-  font-size: 12px;
-}
-
-.mobile-tabs .ant-tabs-tab-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1;
-}
-
-.mobile-tabs .ant-tabs-ink-bar {
-  display: none;
-}
-
-.mobile-tabs .ant-tabs-content-holder {
-  overflow: auto;
-}
-
-/* Desktop tabs */
-.desktop-tabs .ant-tabs-tab {
-  font-size: 14px;
-  padding: 8px 16px;
+.ant-layout-sider {
+  overflow: visible !important;
 }
