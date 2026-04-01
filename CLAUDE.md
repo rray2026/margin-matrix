@@ -94,7 +94,6 @@ All navigation state is owned by `App.tsx` using plain `useState`. There is no r
 - Theme tokens (colors, backgrounds) are defined in `src/styles/theme.ts`.
 - All ECharts options must use `getChartStyles(isDark)` from `theme.ts` for background/text colors.
 - Use `CHART_COLORS` for line/bar series colors; use `SECTOR_COLORS` for heatmaps (12 distinct colors).
-- The `__BUILD_TIME__` global (injected by Vite) is displayed in the status bar at the bottom.
 
 ---
 
@@ -127,7 +126,6 @@ All navigation state is owned by `App.tsx` using plain `useState`. There is no r
 - **No Tailwind, no CSS Modules, no styled-components.** Use Ant Design props + inline `style={{}}` objects.
 - Global utility classes (`.change-positive`, `.change-negative`, `.change-neutral`) are in `global.css`.
 - Dashboard content max-width is 1600px (enforced in `global.css`).
-- Font stack: PingFang SC → Microsoft YaHei → Helvetica Neue → Arial (Chinese-first).
 
 ### Chinese language
 - All UI text is in Simplified Chinese. Keep it that way.
@@ -153,31 +151,3 @@ All navigation state is owned by `App.tsx` using plain `useState`. There is no r
 ### New KPI card
 - Reuse `src/components/common/KpiCard.tsx`. Do not create one-off KPI card implementations.
 
----
-
-## CI/CD
-
-Defined in `.github/workflows/deploy.yml`:
-- **Trigger:** push to `main` or any `claude/**` branch.
-- **Build:** `npm ci` → `npm run build`.
-- **Deploy:** Cloudflare Pages.
-  - `main` → production environment.
-  - `claude/**` → nightly/preview environment.
-- Secrets required: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
-
-Development branches follow the pattern `claude/<description>-<id>`.
-
----
-
-## Key Files Quick Reference
-
-| Task | File |
-|------|------|
-| Add/change top-level nav | `src/App.tsx` |
-| Change theme colors | `src/styles/theme.ts` |
-| Change global layout/fonts | `src/styles/global.css` |
-| Add a company to the selector | `src/mock/companyData.ts` → `companiesMap` |
-| Add macro KPI data | `src/mock/macroData.ts` |
-| Add investment prediction | `src/mock/investmentData.ts` |
-| Modify header/layout | `src/layouts/DashboardLayout.tsx` |
-| Change mobile breakpoint | `src/hooks/useIsMobile.ts` |
